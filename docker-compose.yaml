@@ -1,0 +1,13 @@
+version: '2.2'
+services:
+
+  postgres:
+    image: postgres:17.2
+    restart: always
+    environment:
+      POSTGRES_DB: miras
+      POSTGRES_PASSWORD: miras
+      POSTGRES_USER: miras
+      POSTGRES_HOST_AUTH_METHOD: "trust"
+    ports:
+      - 5432:5432

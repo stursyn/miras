@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="kz.satpaev.sunkar.controllers.ItemController"
+            prefHeight="200.0" prefWidth="320.0">
+    <Pane prefHeight="160.0" prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="5.0">
+        <children>
+            <TilePane>
+                <Label layoutX="5" text="Штрих код:"/>
+                <TextField layoutX="20" fx:id="barcode" />
+            </TilePane>
+            <TilePane  layoutY="40" >
+                <Label layoutX="5" text="Наименование:"/>
+                <TextField layoutX="250" fx:id="name"/>
+            </TilePane>
+            <TilePane  layoutY="80">
+                <Label layoutX="5" text="Цена продажи:"/>
+                <TextField layoutX="250" fx:id="sellPrice"/>
+            </TilePane>
+            <TilePane layoutY="120" >
+                <Label layoutX="5" text="Количество в складе:"/>
+                <TextField layoutX="250" fx:id="quantity"/>
+            </TilePane>
+        </children>
+    </Pane>
+    <Pane prefWidth="200.0" layoutY="160" >
+        <Button fx:id="save" prefWidth="300.0"  layoutX="5" text="Сохранить" onAction="#save"/>
+    </Pane>
+</AnchorPane>

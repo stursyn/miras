@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+
+    <changeSet author="seiit" id="create item table">
+        <createTable tableName="item">
+            <column name="barcode" type="varchar(255)" />
+            <column name="name" type="varchar(255)"/>
+            <column name="description" type="text"/>
+            <column name="price" type="numeric"/>
+            <column name="sell_price" type="numeric"/>
+        </createTable>
+
+        <addPrimaryKey tableName="item"
+                       columnNames="barcode"
+                       constraintName="pk_barcode"/>
+
+    </changeSet>
+
+    <changeSet author="seiit" id="modify item table">
+        <dropColumn tableName="item" columnName="price"/>
+        <addColumn tableName="item">
+            <column name="current_quantity" type="int"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="seiit" id="create buy item table">
+        <createTable tableName="buy_item">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="quantity" type="int"/>
+            <column name="price" type="numeric"/>
+            <column name="selling_price" type="numeric"/>
+        </createTable>
+        <createSequence sequenceName="buy_item_seq" incrementBy="1" cacheSize="50"/>
+    </changeSet>
+
+    <changeSet author="seiit" id="create sale and sale item table">
+        <createTable tableName="sale">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="amount" type="numeric"/>
+            <column name="sale_time" type="timestamp"/>
+        </createTable>
+        <createSequence sequenceName="sale_seq" incrementBy="1" cacheSize="50"/>
+        <createTable tableName="sale_item">
+            <column name="item_id" type="bigint">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="sale_id" type="bigint">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="quantity" type="int"/>
+            <column name="unit_price" type="numeric"/>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>

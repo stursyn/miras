@@ -1,0 +1,52 @@
+plugins {
+    id 'application'
+    id 'org.openjfx.javafxplugin' version '0.1.0'
+    id 'io.spring.dependency-management' version '1.1.7'
+    id 'org.springframework.boot' version '3.4.2'
+}
+
+group = 'kz.satpayev.sunkar'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+javafx {
+    version = "21"
+    modules = [ 'javafx.controls', 'javafx.fxml' ]
+}
+
+mainClassName = 'kz.satpaev.sunkar.Main'
+
+dependencies {
+    implementation group: 'com.google.zxing', name: 'core', version: '3.4.1'
+    implementation group: 'com.google.zxing', name: 'javase', version: '3.4.1'
+    implementation group: 'com.calendarfx', name: 'view', version: '11.12.7'
+    implementation group: 'de.jensd', name: 'fontawesomefx-commons', version: '9.1.2'
+    implementation group: 'de.jensd', name: 'fontawesomefx-fontawesome', version: '4.7.0-9.1.2'
+    implementation group: 'org.openjfx', name: 'javafx-controls', version: '21'
+    implementation group: 'org.openjfx', name: 'javafx-fxml', version: '21'
+    implementation group: 'de.jensd', name: 'fontawesomefx', version: '8.9'
+    implementation group: 'org.controlsfx', name: 'controlsfx', version: '11.1.0'
+
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+//    implementation 'org.liquibase:liquibase-core'
+
+    runtimeOnly 'org.postgresql:postgresql:42.7.3'
+    implementation 'org.liquibase:liquibase-core'
+
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+}
+
+test {
+    useJUnitPlatform()
+}
