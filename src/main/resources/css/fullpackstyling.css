@@ -22,12 +22,6 @@
    -fx-font-weight: bold;
    -fx-alignment: CENTER_LEFT;
 }
-.table-view .cell{
-   -fx-cell-size: 30;
-  -fx-alignment: center-left;
-  -fx-text-fill: #000000;
-  -fx-alignment: CENTER_LEFT;
-}
 
 .table-row-cell:selected {
     -fx-background-color:  rgb(127, 172, 243);

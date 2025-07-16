@@ -6,6 +6,6 @@ import java.io.Serializable;
 
 @Data
 public class SaleItemId  implements Serializable {
-    private Long itemId;
+    private String itemBarcode;
     private Long saleId;
 }

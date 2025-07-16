@@ -4,54 +4,54 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: #fff;"
-            xmlns="http://javafx.com/javafx/9.0.1"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="kz.satpaev.sunkar.controllers.SellOperationController">
-   <children>
-      <Pane prefHeight="90.0" prefWidth="980.0" style="-fx-background-color: #2D75E8;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <children>
-            <Label layoutX="130.0" layoutY="5.0" text="Sunkar" textFill="WHITE">
+<?import javafx.geometry.Insets?>
+<StackPane style="-fx-background-color: #fff;"
+           xmlns="http://javafx.com/javafx/9.0.1"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="kz.satpaev.sunkar.controllers.SellOperationController">
+   <VBox maxWidth="Infinity" maxHeight="Infinity" VBox.vgrow="ALWAYS" spacing="10">
+<!--      <MenuBar style="-fx-background-color: #2D75E8; -fx-text-fill: white"  fx:id="menu">-->
+<!--         <Menu text="Отчет" style=" -fx-font-size: 14; ">-->
+<!--            <MenuItem text="Остаток"/>-->
+<!--         </Menu>-->
+<!--      </MenuBar>-->
+      <VBox maxWidth="Infinity" maxHeight="Infinity" VBox.vgrow="ALWAYS">
+         <HBox style="-fx-background-color: #2D75E8;">
+            <FontAwesomeIconView fill="WHITE" glyphName="GG" size="60"/>
+            <Label text="Sunkar" textFill="WHITE">
                <font>
-                  <Font size="48.0" />
+                  <Font size="48.0"/>
                </font>
             </Label>
-            <FontAwesomeIconView fill="WHITE" glyphName="GG" layoutX="53.0" layoutY="55.0" size="60" />
-         </children>
-      </Pane>
-      <TableView fx:id="itemTable" layoutX="20.0" layoutY="10.0" prefHeight="943.0" prefWidth="1066.0" stylesheets="@../css/fullpackstyling.css"
-                 AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="100.0">
-         <columns>
-            <TableColumn fx:id="barcode" prefWidth="30.0" text="Код" />
-            <TableColumn fx:id="itemName" prefWidth="75.0" text="Наименование" />
-            <TableColumn fx:id="price" prefWidth="15.0" text="Цена" />
-            <TableColumn fx:id="count" prefWidth="20.0" text="Количество" />
-            <TableColumn fx:id="totalPrice" prefWidth="20.0" text="Сумма" />
-            <TableColumn fx:id="operation" prefWidth="10.0" text="Операции" />
-         </columns>
-         <columnResizePolicy>
-            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-         </columnResizePolicy>
-      </TableView>
-      <Pane prefHeight="33.0" prefWidth="322.0" AnchorPane.bottomAnchor="10.0">
-         <children>
-            <Label layoutX="5.0" layoutY="5.0" text="Общая сумма (тг):">
-               <font>
-                  <Font size="20.0" />
-               </font>
-            </Label>
-            <Label fx:id="totalSum" layoutX="170.0" layoutY="5.0">
-               <font>
-                  <Font size="20.0" />
-               </font>
-            </Label>
-         </children>
-      </Pane>
-      <Pane prefHeight="28.0" prefWidth="510.0" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="5.0">
-         <children>
-            <Button prefHeight="28.0" prefWidth="250.0" text="Добавить продукт" onAction="#dbAddNewItemAction"/>
-            <Button layoutX="260.0" prefHeight="28.0" prefWidth="250.0" text="Оплачено" onAction="#paidAll"/>
-         </children>
-      </Pane>
-   </children>
-</AnchorPane>
+         </HBox>
+
+         <TableView fx:id="itemTable" stylesheets="@../css/fullpackstyling.css" VBox.vgrow="ALWAYS">
+            <columns>
+               <TableColumn fx:id="barcode" text="Код"/>
+               <TableColumn fx:id="itemName" text="Наименование"/>
+               <TableColumn fx:id="price" text="Цена"/>
+               <TableColumn fx:id="count" text="Количество"/>
+               <TableColumn fx:id="totalPrice" text="Сумма"/>
+               <TableColumn fx:id="operation" text="Операции"/>
+            </columns>
+         </TableView>
+      </VBox>
+      <HBox maxHeight="Infinity" maxWidth="Infinity" spacing="10">
+         <padding>
+            <Insets right="10" bottom="10"/>
+         </padding>
+         <Label text="Общая сумма (тг):">
+            <font>
+               <Font size="20.0"/>
+            </font>
+         </Label>
+         <Label fx:id="totalSum">
+            <font>
+               <Font size="20.0"/>
+            </font>
+         </Label>
+         <Label HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+         <Button text="Оплачено" onAction="#paidAll" style="-fx-background-color: green; -fx-font-weight: bold; -fx-text-fill: white; -fx-pref-width: 300; -fx-pref-height: 100"/>
+      </HBox>
+   </VBox>
+</StackPane>

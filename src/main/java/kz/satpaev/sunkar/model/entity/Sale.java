@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Table(name = "sale")
 public class Sale {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(name = "sale_seq")
     private Long id;
     private BigDecimal amount;

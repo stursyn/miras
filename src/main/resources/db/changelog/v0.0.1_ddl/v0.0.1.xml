@@ -58,5 +58,15 @@
             <column name="unit_price" type="numeric"/>
         </createTable>
     </changeSet>
+    <changeSet author="seiit" id="modify sale item table column">
+        <modifyDataType tableName="sale_item" columnName="item_id" newDataType="varchar(255)" />
+        <renameColumn tableName="sale_item" oldColumnName="item_id" newColumnName="item_barcode" />
+    </changeSet>
+    <changeSet author="seiit" id="recreate seq">
+        <alterSequence sequenceName="sale_seq" incrementBy="50" cacheSize="50"/>
+    </changeSet>
+    <changeSet author="seiit" id="recreate buy_item_seq">
+        <alterSequence sequenceName="buy_item_seq" incrementBy="50" cacheSize="50"/>
+    </changeSet>
 
 </databaseChangeLog>

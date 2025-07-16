@@ -8,8 +8,8 @@ import java.math.BigDecimal;
 @Table(name = "buy_item")
 public class BuyItem {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @SequenceGenerator(name = "buy_item_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "buy_item_seq", allocationSize = 1)
     private long id;
     private int quantity;
     private BigDecimal price;

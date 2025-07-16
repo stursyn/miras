@@ -13,7 +13,7 @@ public class SaleItem {
     @Id
     private Long saleId;
     @Id
-    private Long itemId;
-    private Long quantity;
+    private String itemBarcode;
+    private Integer quantity;
     private BigDecimal unitPrice;
 }
