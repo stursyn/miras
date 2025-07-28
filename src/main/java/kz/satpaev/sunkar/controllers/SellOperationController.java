@@ -75,7 +75,7 @@ public class SellOperationController implements Initializable {
         operation.setCellFactory(new ItemRemoveButtonCallback(() -> {
             countTotalSum();
             return null;
-        }));
+        }, itemRepository));
 
         barcode.prefWidthProperty().bind(itemTable.widthProperty().multiply(0.1));
         itemName.prefWidthProperty().bind(itemTable.widthProperty().multiply(0.65));
@@ -150,11 +150,6 @@ public class SellOperationController implements Initializable {
 
         itemTable.getItems().clear();
         countTotalSum();
-    }
-
-    public void dbAddNewItemAction() {
-        dbAddNewItem(null);
-        sb.setLength(0);
     }
 
     public void dbAddNewItem(String name) {
