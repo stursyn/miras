@@ -1,11 +1,18 @@
 package kz.satpaev.sunkar.controllers;
 
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.oned.EAN13Writer;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.MenuBar;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -19,19 +26,25 @@ import kz.satpaev.sunkar.model.entity.SaleItem;
 import kz.satpaev.sunkar.repository.ItemRepository;
 import kz.satpaev.sunkar.repository.SaleItemRepository;
 import kz.satpaev.sunkar.repository.SaleRepository;
+import kz.satpaev.sunkar.service.NiimbotB1PrinterService;
+import lombok.SneakyThrows;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.ResourceBundle;
 
 import static kz.satpaev.sunkar.Main.applicationContext;
+import static kz.satpaev.sunkar.util.ByteUtil.calculateChecksum;
 
 @Component
 public class SellOperationController implements Initializable {
@@ -127,6 +140,48 @@ public class SellOperationController implements Initializable {
             dbAddNewItem("Неизвестный товар");
             itemTableAddNewItem(barCode);
         }
+    }
+
+    public static BufferedImage generateEAN13BarcodeImage(String barcodeText) throws Exception {
+        EAN13Writer barcodeWriter = new EAN13Writer();
+        BitMatrix bitMatrix = barcodeWriter.encode(barcodeText, BarcodeFormat.EAN_13, 300, 150);
+
+        return MatrixToImageWriter.toBufferedImage(bitMatrix);
+    }
+
+    @SneakyThrows
+    public BufferedImage getImage() {
+        int pxWidth = 400;   // 50 мм → пиксели
+        int pxHeight = (int)(30 / 25.4 * 203); // 30 мм → пиксели
+
+        BufferedImage img = new BufferedImage(pxWidth, pxHeight, BufferedImage.TYPE_BYTE_BINARY);
+        Graphics2D g = img.createGraphics();
+        g.setColor(Color.WHITE);
+        g.fillRect(0, 0, pxWidth, pxHeight);
+        g.setColor(Color.BLACK);
+
+        // 2. Рисуем текст
+        g.setFont(new Font("Arial", Font.BOLD, 24));
+        g.drawString("Привет, B1!", 10, 30);
+
+        // 3. Генерируем QR код (ZXing)
+        String barcodeText = new Random().nextInt(1_000_000, 9_999_999)
+                + "" + new Random().nextInt(10_000, 99_999);
+        BufferedImage qr = generateEAN13BarcodeImage(barcodeText + calculateChecksum(barcodeText));
+
+        g.drawImage(qr, 10, 40, null);
+        g.dispose();
+        return img;
+    }
+
+    public void printFile() {
+        try (var printer = new NiimbotB1PrinterService("COM3", 9600)) {
+            printer.testPrinter(getImage());
+            System.out.println("finish printing");
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+        System.out.println("finish method");
     }
 
     public void paidAll() {
