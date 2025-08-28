@@ -1,13 +1,20 @@
 package kz.satpaev.sunkar.service;
 
 import com.fazecast.jSerialComm.SerialPort;
-import kz.satpaev.sunkar.util.ByteUtil;
+import kz.satpaev.sunkar.model.dto.ImageRow;
+import kz.satpaev.sunkar.model.dto.NiimbotPacket;
+import kz.satpaev.sunkar.util.AppUtil;
 import lombok.SneakyThrows;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HexFormat;
 
-import static kz.satpaev.sunkar.util.ByteUtil.countPixelsForBitmapPacket;
+import static kz.satpaev.sunkar.util.AppUtil.countPixelsForBitmapPacket;
+import static kz.satpaev.sunkar.util.AppUtil.indexPixels;
 
 public class NiimbotB1PrinterService implements AutoCloseable {
     private final SerialPort serialPort;
@@ -51,10 +58,45 @@ public class NiimbotB1PrinterService implements AutoCloseable {
         return out.toByteArray();
     }
 
+    @SneakyThrows
+    private NiimbotPacket sendPacketWaitResponse(byte cmd, byte[] payload) {
+        byte[] packet = buildPacket(cmd, payload);
+        serialPort.writeBytes(packet, packet.length);
+        System.out.println("Sent: " + HexFormat.of().formatHex(packet));
+
+        int workingTime = 0;
+        boolean reading = true;
+        while (reading) {
+            Thread.sleep(100); // ждём, чтобы принтер успел ответить
+            int available = serialPort.bytesAvailable();
+            if (available > 0) {
+                byte[] buf = new byte[available];
+                serialPort.readBytes(buf, buf.length);
+                System.out.println("Recv: " + HexFormat.of().formatHex(buf));
+
+                return NiimbotPacket.builder()
+                        .command(buf[2])
+                        .size(buf[3])
+                        .data(Arrays.copyOfRange(buf, 4, 4 + buf[3]))
+                        .build();
+            } else {
+                System.out.println("Ждет ответа");
+            }
+            workingTime += 100;
+            if (workingTime >= 1200) {
+                reading = false;
+
+                System.out.println("Timeout");
+            }
+        }
+
+        throw new RuntimeException("Timeout");
+    }
+
     private void sendPacket(byte cmd, byte[] payload) {
         byte[] packet = buildPacket(cmd, payload);
         serialPort.writeBytes(packet, packet.length);
-        System.out.println("Sent: " + bytesToHex(packet));
+        System.out.println("Sent: " + HexFormat.of().formatHex(packet));
     }
 
     // Проверка, не белый ли пиксель
@@ -77,12 +119,13 @@ public class NiimbotB1PrinterService implements AutoCloseable {
             throw new IllegalArgumentException("Width must be multiple of 8");
         }
 
+        var rowsData = new ArrayList<ImageRow>();
+
         int bytesPerRow = width / 8;
-        int emptyRowsCount = 0;
-        int emptyRowStart = 0;
         for (int row = 0; row < height; row++) {
             var isVoid = true;
-            byte[] rowsData = new byte[bytesPerRow];
+            var blackPixelCount = 0;
+            byte[] rowColumnData = new byte[bytesPerRow];
             for (int colOct = 0; colOct < bytesPerRow; colOct++) {
                 byte pixelsOctet = 0;
                 for (int colBit = 0; colBit < 8; colBit++) {
@@ -90,83 +133,138 @@ public class NiimbotB1PrinterService implements AutoCloseable {
                     if (isPixelNonWhite(img, x, row)) {
                         isVoid = false;
                         pixelsOctet |= (byte) (1 << (7 - colBit));
+                        blackPixelCount++;
                     }
                 }
-                rowsData[colOct] = pixelsOctet;
+                rowColumnData[colOct] = pixelsOctet;
             }
-            if (isVoid) {
-                if(emptyRowStart == 0) emptyRowStart = row;
-                emptyRowsCount++;
+            var imageRow = ImageRow.builder()
+                    .type(isVoid? ImageRow.Type.VOID: ImageRow.Type.PIXEL)
+                    .rowNumber(row)
+                    .repeatCount(1)
+                    .columnData(rowColumnData)
+                    .blackPixelCount(blackPixelCount)
+                    .build();
+
+            if (rowsData.isEmpty()) {
+                rowsData.add(imageRow);
+                continue;
+            }
+
+            var lastImageRow = rowsData.getLast();
+            var same = lastImageRow.getType() == imageRow.getType();
+
+            if (same && imageRow.getType() == ImageRow.Type.PIXEL) {
+                same = Arrays.equals(lastImageRow.getColumnData(), imageRow.getColumnData());
+            }
+
+            if (same) {
+                lastImageRow.setRepeatCount(lastImageRow.getRepeatCount() + 1);
             } else {
-                if (emptyRowsCount >0) {
-                    byte[] bytes = ByteUtil.u16ToBytes(emptyRowStart);
-                    sendPacket((byte) 0x84, new byte[]{bytes[0], bytes[1], (byte) emptyRowsCount});
-                    emptyRowsCount = 0;
-                }
-
-                byte[] bytes = ByteUtil.u16ToBytes(row);
-                var integerPair = countPixelsForBitmapPacket(rowsData, 384);
-                ByteArrayOutputStream out = new ByteArrayOutputStream();
-                out.write(bytes[0]);
-                out.write(bytes[1]);
-                for (var b : integerPair.getRight()) {
-                    out.write(b);
-                }
-                out.write( 0x00);
-                out.write( rowsData);
-                sendPacket((byte) 0x85, out.toByteArray());
+                rowsData.add(imageRow);
             }
         }
 
-        if (emptyRowsCount >0) {
-            byte[] bytes = ByteUtil.u16ToBytes(emptyRowStart);
-            sendPacket((byte) 0x84, new byte[]{bytes[0], bytes[1], (byte) emptyRowsCount});
-        }
+        rowsData.forEach(row -> {
+            byte[] bytes = AppUtil.u16ToBytes(row.getRowNumber());
+
+            if (row.getType() == ImageRow.Type.VOID) {
+                sendPacket((byte) 0x84, new byte[] {bytes[0], bytes[1], (byte) row.getRepeatCount()});
+                return;
+            }
+
+            if (row.getBlackPixelCount() <= 6) {
+                printBitmapRowIndex(row, bytes);
+                return;
+            }
+
+            printBitmapRow(row, bytes);
+
+        });
+
     }
 
-    public void testPrinter(BufferedImage image) throws InterruptedException {
+    private void printBitmapRowIndex(ImageRow row, byte[] bytes) {
+        var integerPair = countPixelsForBitmapPacket(row.getColumnData(), 384);
+
+        if (integerPair.getLeft() > 6) {
+            throw new RuntimeException("Black pixel count > 6 (" + integerPair.getLeft() + ")");
+        }
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        out.write(bytes[0]);
+        out.write(bytes[1]);
+        for (var b : integerPair.getRight()) {
+            out.write(b);
+        }
+        out.write(row.getRepeatCount());
+        try {
+            out.write(indexPixels(row.getColumnData()));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        sendPacket((byte) 0x83, out.toByteArray());
+    }
+
+    private void printBitmapRow(ImageRow row, byte[] bytes) {
+        var integerPair = countPixelsForBitmapPacket(row.getColumnData(), 384);
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        out.write(bytes[0]);
+        out.write(bytes[1]);
+        for (var b : integerPair.getRight()) {
+            out.write(b);
+        }
+        out.write(row.getRepeatCount());
+        try {
+            out.write(row.getColumnData());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        sendPacket((byte) 0x85, out.toByteArray());
+    }
+
+    public void print(BufferedImage image) throws InterruptedException {
 
         // 2. Устанавливаем плотность (8)
-        sendPacket((byte)0x21, new byte[]{(byte)0x01});
+        sendPacketWaitResponse((byte) 0x21, new byte[]{(byte) 0x03});
 
         // 3. Тип ленты = стандарт
-        sendPacket((byte)0x23, new byte[]{(byte)0x01});
+        sendPacketWaitResponse((byte) 0x23, new byte[]{(byte) 0x01});
 
         // 4. Start печати
-        sendPacket((byte)0x01, new byte[]{(byte)0x00,(byte) 0x01, (byte)0x00,(byte) 0x00,(byte) 0x00, (byte)0x00, (byte)0x00}); // PrintStart
+        sendPacketWaitResponse((byte)0x01, new byte[]{(byte)0x00,(byte) 0x01, (byte)0x00,(byte) 0x00,(byte) 0x00, (byte)0x00, (byte)0x00}); // PrintStart
 
-        sendPacket((byte)0x03, new byte[]{(byte)0x01}); // PageStart
+        sendPacketWaitResponse((byte)0x03, new byte[]{(byte)0x01}); // PageStart
 
         // 5. Размер страницы 50×30 мм, 203 dpi
-        sendPacket((byte)0x13, new byte[]{(byte)0x00, (byte)0xf0, (byte)0x01, (byte)0x90, (byte)0x00, (byte)0x01});
+        sendPacketWaitResponse((byte)0x13, new byte[]{(byte)0x00, (byte)0xf0, (byte)0x01, (byte)0x90, (byte)0x00, (byte)0x01});
 
         encodeImageAndSend(image);
-        // 6. Закрываем страницу
-        sendPacket((byte)0xe3, new byte[]{0x01}); // PageEnd
 
-        boolean reading = true;
-        while (reading) {
-            Thread.sleep(500); // ждём, чтобы принтер успел ответить
-            int available = serialPort.bytesAvailable();
-            if (available > 0) {
-                reading = false;
-                byte[] buf = new byte[available];
-                serialPort.readBytes(buf, buf.length);
-                System.out.println("Recv: " + bytesToHex(buf));
-            } else {
-                System.out.println("Ждет ответа");
+        // 6. Закрываем страницу
+        sendPacketWaitResponse((byte)0xe3, new byte[]{0x01}); // PageEnd
+
+        var statusWait = true;
+        while (statusWait) {
+            var response = sendPacketWaitResponse((byte)0xa3, new byte[]{0x01}); // PageEnd
+            if (response.getCommand() == (byte) 0xb3) {
+                if(response.getData()[6] != (byte) 0x00)
+                    throw new RuntimeException("Print error packet flag");
             }
+
+            var pagePrintProgress = response.getData()[2];
+            var pageFeedProgress  = response.getData()[3];
+
+            if(pageFeedProgress == 100 && pagePrintProgress == 100) {
+                statusWait = false;
+            }
+            Thread.sleep(300);
         }
+
         // 7. Завершаем печать
         sendPacket((byte)0xf3, new byte[]{0x01}); // PrintEnd
-    }
-
-    private String bytesToHex(byte[] arr) {
-        StringBuilder sb = new StringBuilder();
-        for (byte b : arr) {
-            sb.append(String.format("%02X ", b));
-        }
-        return sb.toString();
     }
 
     @Override

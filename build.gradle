@@ -29,6 +29,7 @@ dependencies {
     implementation group: 'com.google.zxing', name: 'core', version: '3.4.1'
     implementation group: 'com.google.zxing', name: 'javase', version: '3.4.1'
     implementation group: 'com.calendarfx', name: 'view', version: '11.12.7'
+    implementation group: 'net.sourceforge.barbecue', name: 'barbecue', version: '1.5-beta1'
     implementation group: 'de.jensd', name: 'fontawesomefx-commons', version: '9.1.2'
     implementation group: 'de.jensd', name: 'fontawesomefx-fontawesome', version: '4.7.0-9.1.2'
     implementation group: 'org.openjfx', name: 'javafx-controls', version: '21'

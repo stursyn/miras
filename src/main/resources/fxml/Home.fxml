@@ -52,6 +52,7 @@
          </Label>
          <Label HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
          <Button text="Печать" onAction="#printFile" style="-fx-background-color: blue; -fx-font-weight: bold; -fx-text-fill: white; -fx-pref-width: 300; -fx-pref-height: 100"/>
+         <Button text="Печать 2" onAction="#printFileLine" style="-fx-background-color: blue; -fx-font-weight: bold; -fx-text-fill: white; -fx-pref-width: 300; -fx-pref-height: 100"/>
          <Button text="Оплачено" onAction="#paidAll" style="-fx-background-color: green; -fx-font-weight: bold; -fx-text-fill: white; -fx-pref-width: 300; -fx-pref-height: 100"/>
       </HBox>
    </VBox>
