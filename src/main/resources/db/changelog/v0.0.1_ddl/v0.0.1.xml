@@ -69,4 +69,14 @@
         <alterSequence sequenceName="buy_item_seq" incrementBy="50" cacheSize="50"/>
     </changeSet>
 
+    <changeSet author="seiit" id="modify item table 2">
+        <addColumn tableName="item">
+            <column name="weight" type="numeric"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="seiit" id="modify sale 001">
+        <addColumn tableName="sale">
+            <column name="payment_type" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

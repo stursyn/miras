@@ -1,59 +1,84 @@
-.button
-{
--fx-background-color : #F3F3F3;
+.button {
+    -fx-background-color: #F3F3F3;
+    -fx-wrap-text: true;
+    -fx-text-alignment: center;
+    -fx-alignment: center;
 }
-.button:hover
-{
--fx-background-color : #A1C1F4 ;
+
+.button:hover {
+    -fx-background-color: #A1C1F4;
 }
-.button:pressed
-{
--fx-background-color : #73A3EF ;
+
+.button:pressed {
+    -fx-background-color: #73A3EF;
+}
+
+.table-view {
+    -fx-background-color: white;
+    -fx-padding: 0;
 }
 
 .table-view .column-header,
 .table-view .column-header-background .filler {
-    -fx-cell-size : 20;
-    -fx-background-color:   #2D75E8;
+    -fx-cell-size: 30;
+    -fx-size: 50;
+    -fx-background-color: #93b6f4;
+    -fx-table-cell-border-color: #c8ddff; /* светло-голубой */
 }
-.table-view .column-header .label{
 
-   -fx-text-fill: white;
-   -fx-font-weight: bold;
-   -fx-alignment: CENTER_LEFT;
+.table-view .column-header .label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 24;
+    -fx-alignment: CENTER_LEFT;
+}
+
+.table-row-cell {
+    -fx-background-color: white;
+    -fx-font-size: 20;
+    -fx-border-color: #c8ddff; /* граница строк */
+    -fx-border-width: 0 0 1 0; /* нижняя линия */
+}
+
+/* при наведении */
+.table-row-cell:hover {
+    -fx-background-color: #f6faff; /* очень светлый голубоватый */
+    -fx-border-color: #7bb0ff; /* чуть ярче при выделении */
 }
 
 .table-row-cell:selected {
-    -fx-background-color:  rgb(127, 172, 243);
- }
- .table-row-cell:selected .text {
-        -fx-fill : white ;
- 
- }
+    -fx-background-color: rgb(127, 172, 243);
+}
+
+.table-row-cell:selected .text {
+    -fx-fill: white;
+
+}
+
 /* scroll bar starts here */
 
 /* The increment and decrement button CSS class of scrollbar */
-.table-view .increment-button ,.table-view .decrement-button {
-    -fx-background-color:transparent;
-	-fx-background-radius: 2em;
+.table-view .increment-button, .table-view .decrement-button {
+    -fx-background-color: transparent;
+    -fx-background-radius: 2em;
 
 }
 
 /* The main scrollbar **track** CSS class  */
 .table-view .scroll-bar:horizontal .track,
-.table-view .scroll-bar:vertical .track{
-	-fx-background-color: transparent;
-	-fx-border-color:derive(  #2D75E8,80%);
-	-fx-background-radius: 2em;
-	-fx-border-radius:2em;
+.table-view .scroll-bar:vertical .track {
+    -fx-background-color: transparent;
+    -fx-border-color: derive(#2D75E8, 80%);
+    -fx-background-radius: 2em;
+    -fx-border-radius: 2em;
 }
 
 /* The main scrollbar **thumb** CSS class which we drag every time (movable) */
 .table-view .scroll-bar:horizontal .thumb,
 .table-view .scroll-bar:vertical .thumb {
-    -fx-background-color:derive( #2D75E8,90%);
-	-fx-background-insets: 2, 0, 0;
-	-fx-background-radius: 2em;
+    -fx-background-color: derive(#2D75E8, 90%);
+    -fx-background-insets: 2, 0, 0;
+    -fx-background-radius: 2em;
 
 }
 
@@ -64,11 +89,143 @@
     -fx-background-color: transparent;
     -fx-legend-visible: false;
 }
+
 .chart-plot-background {
-    -fx-background-color:transparent;
+    -fx-background-color: transparent;
 }
 
 .chart-pie {
     -fx-border-color: derive(-fx-pie-color, 1%);
     -fx-border-width: 0px;
+}
+
+.option-key {
+    -fx-font-size: 16px;
+    -fx-padding: 10 12;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-background-color: #b3cdfa;
+    -fx-border-color: rgba(0,0,0,0.06);
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 4, 0.1, 0, 2);
+}
+
+.total-label {
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+}
+
+.other-label {
+    -fx-font-size: 20px;
+}
+
+.info-card {
+    -fx-background-color: white;
+    -fx-background-radius: 16;
+    -fx-padding: 16;
+
+    /* тень */
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 12, 0.2, 0, 4);
+}
+
+.add-label {
+    -fx-font-size: 20px;
+}
+
+.text-field {
+   -fx-font-size: 18px;
+   -fx-border-width: 2px;
+   -fx-border-radius: 25;
+}
+
+.add-button {
+    -fx-font-size: 18px;
+}
+
+.add-grid {
+    -fx-background-color: white;
+}
+
+.wrap-button .text {
+    -fx-wrap-text: true;
+}
+.white-button {
+    -fx-font-size: 16px;
+    -fx-font-weight: 600;
+    -fx-text-fill: black;
+    -fx-background-radius: 14;
+    -fx-background-color: white;
+}
+
+.green-button {
+    -fx-font-size: 16px;
+    -fx-font-weight: 600;
+    -fx-text-fill: black;
+    -fx-background-radius: 14;
+    -fx-background-color: #287028;
+}
+.red-button {
+    -fx-font-size: 16px;
+    -fx-font-weight: 600;
+    -fx-text-fill: white;
+    -fx-background-radius: 14;
+    -fx-background-color: #ae1919;
+}
+
+.qr-kaspi-button {
+    -fx-font-size: 16px;
+    -fx-font-weight: 600;
+    -fx-text-fill: white;
+    -fx-background-radius: 14;
+    -fx-background-color: #169785;
+}
+.custom-dialog {
+    -fx-background-color: white;
+}
+
+/* Заголовок */
+.custom-dialog > .header-panel {
+    -fx-background-color: transparent;
+    -fx-padding: 0 0 0 0;
+}
+
+.custom-dialog .header-panel .label {
+    -fx-font-size: 20px;
+    -fx-font-weight: 700;
+}
+
+/* Текст */
+.custom-dialog .content {
+    -fx-font-size: 16px;
+    -fx-text-fill: #333333;
+}
+
+/* Кнопки */
+.custom-dialog .button-bar .button {
+    -fx-background-radius: 12;
+    -fx-padding: 8 20 8 20;
+    -fx-font-size: 20px;
+    -fx-font-weight: 600;
+}
+
+/* OK */
+.custom-dialog .button-bar .button:default {
+    -fx-background-color: #4A8CFF;
+    -fx-text-fill: white;
+}
+
+/* OK hover */
+.custom-dialog .button-bar .button:default:hover {
+    -fx-background-color: #3c75d6;
+}
+
+/* CANCEL */
+.custom-dialog .button-bar .button {
+    -fx-background-color: #E8E8E8;
+    -fx-text-fill: #333;
+}
+
+/* CANCEL hover */
+.custom-dialog .button-bar .button:hover {
+    -fx-background-color: #D6D6D6;
 }

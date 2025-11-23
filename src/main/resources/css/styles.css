@@ -1,0 +1,48 @@
+.vk-root {
+    -fx-background-color: linear-gradient(#ffffff, #f6f7fb);
+    -fx-padding: 14;
+    -fx-border-radius: 12;
+    -fx-background-radius: 12;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.12), 10, 0.2, 0, 4);
+}
+
+.vk-key {
+    -fx-font-size: 16px;
+    -fx-padding: 10 12;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-background-color: white;
+    -fx-border-color: rgba(0,0,0,0.06);
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 4, 0.1, 0, 2);
+}
+
+.vk-key:hover {
+    -fx-translate-y: -2;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.10), 8, 0.2, 0, 6);
+}
+
+.vk-action {
+    -fx-font-weight: 600;
+    -fx-background-color: linear-gradient(#f0f3ff, #dfe9ff);
+    -fx-padding: 10 16;
+    -fx-background-radius: 10;
+}
+
+.vk-space {
+    -fx-pref-width: 320px;
+    -fx-background-radius: 12;
+}
+
+.vk-toggle {
+    -fx-background-color: linear-gradient(#fff, #f5f5f8);
+    -fx-background-radius: 10;
+}
+
+/* адаптивные размеры */
+@media screen and (max-width: 600px) {
+    .vk-key {
+        -fx-font-size: 14px;
+        -fx-min-width: 44;
+    }
+}

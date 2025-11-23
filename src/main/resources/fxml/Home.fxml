@@ -5,9 +5,12 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
 <?import javafx.geometry.Insets?>
+
 <StackPane style="-fx-background-color: #fff;"
            xmlns="http://javafx.com/javafx/9.0.1"
            xmlns:fx="http://javafx.com/fxml/1"
+           stylesheets="@../css/fullpackstyling.css"
+           fx:id="rootStackPane"
            fx:controller="kz.satpaev.sunkar.controllers.SellOperationController">
    <VBox maxWidth="Infinity" maxHeight="Infinity" VBox.vgrow="ALWAYS" spacing="10">
 <!--      <MenuBar style="-fx-background-color: #2D75E8; -fx-text-fill: white"  fx:id="menu">-->
@@ -25,35 +28,66 @@
             </Label>
          </HBox>
 
-         <TableView fx:id="itemTable" stylesheets="@../css/fullpackstyling.css" VBox.vgrow="ALWAYS">
+         <TableView fx:id="itemTable" VBox.vgrow="ALWAYS">
             <columns>
-               <TableColumn fx:id="barcode" text="Код"/>
-               <TableColumn fx:id="itemName" text="Наименование"/>
-               <TableColumn fx:id="price" text="Цена"/>
-               <TableColumn fx:id="count" text="Количество"/>
-               <TableColumn fx:id="totalPrice" text="Сумма"/>
-               <TableColumn fx:id="operation" text="Операции"/>
+               <TableColumn fx:id="barcode" text="Код" style="-fx-alignment: CENTER_LEFT"/>
+               <TableColumn fx:id="itemName" text="Наименование"  style="-fx-alignment: CENTER_LEFT"/>
+               <TableColumn fx:id="price" text="Цена"  style="-fx-alignment: CENTER_RIGHT"/>
+               <TableColumn fx:id="count" text="Количество" style="-fx-alignment: CENTER_RIGHT"/>
+               <TableColumn fx:id="totalPrice" text="Сумма" style="-fx-alignment: CENTER_RIGHT"/>
+               <TableColumn fx:id="operation" text="Операции" style="-fx-alignment: CENTER"/>
             </columns>
          </TableView>
       </VBox>
-      <HBox maxHeight="Infinity" maxWidth="Infinity" spacing="10">
+
+      <HBox maxHeight="Infinity" maxWidth="Infinity" spacing="10" style="-fx-background-color: #515153">
          <padding>
-            <Insets right="10" bottom="10"/>
+            <Insets right="10" bottom="10" left="10" top="10"/>
          </padding>
-         <Label text="Общая сумма (тг):">
-            <font>
-               <Font size="20.0"/>
-            </font>
-         </Label>
-         <Label fx:id="totalSum">
-            <font>
-               <Font size="20.0"/>
-            </font>
-         </Label>
+         <VBox prefWidth="520"  prefHeight="220" spacing="30" styleClass="info-card" >
+            <padding>
+               <Insets right="40" top="40" left="40" bottom="40"/>
+            </padding>
+            <HBox maxWidth="Infinity" maxHeight="Infinity" styleClass="total-label">
+               <Label text="ИТОГО"/>
+               <Label HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+               <Label fx:id="totalSum"/>
+            </HBox>
+            <VBox maxWidth="Infinity" maxHeight="Infinity" spacing="10" styleClass="other-label">
+               <HBox maxWidth="Infinity" maxHeight="Infinity">
+                  <Label text="Получено"/>
+                  <Label HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                  <Label fx:id="paidAmount"/>
+               </HBox>
+               <HBox maxWidth="Infinity" maxHeight="Infinity">
+                  <Label text="Сдача"/>
+                  <Label HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                  <Label fx:id="returnAmount"/>
+               </HBox>
+            </VBox>
+         </VBox>
          <Label HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
-         <Button text="Печать" onAction="#printFile" style="-fx-background-color: blue; -fx-font-weight: bold; -fx-text-fill: white; -fx-pref-width: 300; -fx-pref-height: 100"/>
-         <Button text="Печать 2" onAction="#printFileLine" style="-fx-background-color: blue; -fx-font-weight: bold; -fx-text-fill: white; -fx-pref-width: 300; -fx-pref-height: 100"/>
-         <Button text="Оплачено" onAction="#paidAll" style="-fx-background-color: green; -fx-font-weight: bold; -fx-text-fill: white; -fx-pref-width: 300; -fx-pref-height: 100"/>
+         <GridPane hgap="10" vgap="10" stylesheets="@../css/fullpackstyling.css" >
+            <columnConstraints>
+               <ColumnConstraints prefWidth="200" halignment="CENTER"/>
+               <ColumnConstraints prefWidth="200" halignment="CENTER"/>
+               <ColumnConstraints prefWidth="200" halignment="CENTER"/>
+               <ColumnConstraints prefWidth="200" halignment="CENTER"/>
+            </columnConstraints>
+
+            <rowConstraints>
+               <RowConstraints prefHeight="70" valignment="CENTER"/>
+               <RowConstraints prefHeight="70" valignment="CENTER"/>
+               <RowConstraints prefHeight="70" valignment="CENTER"/>
+            </rowConstraints>
+
+            <Button text="ДОБАВИТЬ ТОВАР" wrapText="true" onAction="#addNewProduct" styleClass="green-button, wrap-button" GridPane.rowIndex="0" GridPane.columnIndex="1" maxWidth="Infinity" maxHeight="Infinity" />
+            <Button text="БЫСТРЫЕ ТОВАРЫ" wrapText="true" styleClass="white-button, wrap-button" GridPane.rowIndex="1" GridPane.columnIndex="1" GridPane.rowSpan="2" maxWidth="Infinity" maxHeight="Infinity" />
+            <Button text="ОТМЕНА" styleClass="red-button " onAction="#clearAll" GridPane.rowIndex="0" GridPane.columnIndex="3" maxWidth="Infinity" maxHeight="Infinity" />
+            <Button fx:id="cashButton" text="НАЛИЧНЫМИ" styleClass="white-button " GridPane.rowIndex="1" GridPane.columnIndex="2" maxWidth="Infinity" maxHeight="Infinity" />
+            <Button fx:id="byCard" text="HALYK"  styleClass="white-button " GridPane.rowIndex="1" GridPane.columnIndex="3" maxWidth="Infinity"  maxHeight="Infinity"  />
+            <Button fx:id="qrKaspi" text="KASPI" styleClass="qr-kaspi-button" GridPane.rowIndex="2" GridPane.columnIndex="2" GridPane.columnSpan="2" maxWidth="Infinity"  maxHeight="Infinity" />
+         </GridPane>
       </HBox>
    </VBox>
 </StackPane>

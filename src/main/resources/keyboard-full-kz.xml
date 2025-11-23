@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<keyboard name="Kazakh (KZ)">
+    <row>
+        <keys>
+            <key chars="ё" shifts="Ё" symbols="`" />
+            <key chars="&#34;" shifts="!" symbols="1" />
+            <key chars="ә" shifts="Ә" symbols="2" />
+            <key chars="і" shifts="І" symbols="3" />
+            <key chars="ң" shifts="Ң" symbols="4" />
+            <key chars="ғ" shifts="Ғ" symbols="5" />
+            <key chars="," shifts=";" symbols="6" />
+            <key chars="." shifts=":" symbols="7" />
+            <key chars="ү" shifts="Ү" symbols="8" />
+            <key chars="ұ" shifts="Ұ" symbols="9" />
+            <key chars="қ" shifts="Қ" symbols="0" />
+            <key chars="ө" shifts="Ө" symbols="&lt;" />
+            <key chars="һ" shifts="Һ" symbols="&gt;" />
+            <special type="BACKSPACE" alignment="BOTTOM_RIGHT" cols="6"/>
+        </keys>
+    </row>
+
+    <row>
+        <keys>
+            <special type="TAB" alignment="BOTTOM_LEFT" cols="6"/>
+            <key chars="й" shifts="Й" symbols="["/>
+            <key chars="ц" shifts="Ц" symbols="]"/>
+            <key chars="у" shifts="У" symbols="{"/>
+            <key chars="к" shifts="К" symbols="}"/>
+            <key chars="е" shifts="Е" symbols="#"/>
+            <key chars="н" shifts="Н" symbols="%"/>
+            <key chars="г" shifts="Г" symbols="^"/>
+            <key chars="ш" shifts="Ш" symbols="*"/>
+            <key chars="щ" shifts="Щ" symbols="+"/>
+            <key chars="з" shifts="З" symbols="="/>
+            <key chars="х" shifts="Х" symbols="\"/>
+            <key chars="ъ" shifts="Ъ" symbols="|"/>
+            <key chars="\" shifts="/" symbols="~" show-shift="true"/>
+        </keys>
+    </row>
+
+    <row>
+        <keys>
+            <special type="CAPS" alignment="BOTTOM_LEFT" cols="7"/>
+            <key chars="ф" shifts="Ф" symbols="-"/>
+            <key chars="ы" shifts="Ы" symbols="/"/>
+            <key chars="в" shifts="В" symbols=":"/>
+            <key chars="а" shifts="А" symbols=";"/>
+            <key chars="п" shifts="П" symbols="("/>
+            <key chars="р" shifts="Р" symbols=")"/>
+            <key chars="о" shifts="О" symbols="€"/>
+            <key chars="л" shifts="Л" symbols="&amp;"/>
+            <key chars="д" shifts="Д" symbols="@"/>
+            <key chars="ж" shifts="Ж" symbols="£"/>
+            <key chars="э" shifts="Э" symbols="¥"/>
+            <special type="ENTER" alignment="BOTTOM_RIGHT" cols="7"/>
+        </keys>
+    </row>
+
+    <row>
+        <keys>
+            <special type="SHIFT" alignment="BOTTOM_LEFT" cols="5"/>
+            <key chars="я" shifts="Я"/>
+            <key chars="ч" shifts="Ч" symbols="..."/>
+            <key chars="с" shifts="С" symbols="."/>
+            <key chars="м" shifts="М" symbols=","/>
+            <key chars="и" shifts="И" symbols="?"/>
+            <key chars="т" shifts="Т" symbols="!"/>
+            <key chars="ь" shifts="Ь" symbols="'"/>
+            <key chars="б" shifts="Б" symbols="&quot;" />
+            <key chars="ю" shifts="Ю" symbols="_" />
+            <key chars="." shifts="," symbols="$" show-shift="true"/>
+            <special type="SHIFT" alignment="BOTTOM_RIGHT" cols="9"/>
+        </keys>
+    </row>
+
+    <row>
+        <keys>
+            <special type="KEYBOARDS" alignment="BOTTOM_LEFT" cols="5"/>
+            <special type="SPECIAL_CHARACTERS" alignment="BOTTOM_LEFT" cols="5"/>
+            <special type="MICROPHONE" alignment="BOTTOM_LEFT" cols="5"/>
+            <special type="SPACE" cols="28"/>
+            <key chars=".kz" shifts=".KZ" cols="5"/>
+            <special type="SPECIAL_CHARACTERS" alignment="BOTTOM_RIGHT" cols="5"/>
+        </keys>
+    </row>
+</keyboard>

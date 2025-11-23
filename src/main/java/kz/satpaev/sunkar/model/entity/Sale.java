@@ -14,6 +14,8 @@ public class Sale {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(name = "sale_seq")
     private Long id;
+    @Enumerated(EnumType.STRING)
+    private PaymentType paymentType;
     private BigDecimal amount;
     private LocalDateTime saleTime;
 }
