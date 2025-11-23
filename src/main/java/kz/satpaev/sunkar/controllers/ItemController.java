@@ -72,7 +72,7 @@ public class ItemController implements Initializable {
             if (sellPrice.getText() != null) {
                 newItem.setSellPrice(new BigDecimal(sellPrice.getText()));
             }
-            if (!StringUtils.isEmpty(quantity.getText())) {
+            if (!StringUtils.isEmpty(quantity.getText()) && !"null".equals(quantity.getText())) {
                 newItem.setCurrentQuantity(Integer.parseInt(quantity.getText()));
             } else {
                 newItem.setCurrentQuantity(0);
