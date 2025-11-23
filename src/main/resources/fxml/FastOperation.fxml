@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.*?>
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="kz.satpaev.sunkar.controllers.FastOperationController"
+            stylesheets="@../css/fullpackstyling.css"
+            maxWidth="1000.0" maxHeight="550">
+    <top>
+        <GridPane styleClass="add-grid"
+                  hgap="10" vgap="10" >
+            <padding>
+                <Insets top="10" right="10" left="10" bottom="10"/>
+            </padding>
+
+            <Label text="Название продукта для поиска" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="add-label"/>
+            <TextField fx:id="nameLike" GridPane.rowIndex="1" GridPane.columnIndex="0"
+                       GridPane.hgrow="ALWAYS" maxWidth="Infinity" />
+        </GridPane>
+    </top>
+    <center>
+        <GridPane fx:id="productGrid" styleClass="add-grid"
+                  hgap="10" vgap="10" >
+            <padding>
+                <Insets top="10" right="10" left="10" bottom="10"/>
+            </padding>
+        </GridPane>
+    </center>
+    <bottom>
+        <VBox fx:id="keyboard"/>
+    </bottom>
+</BorderPane>

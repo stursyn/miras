@@ -145,32 +145,35 @@ public class SellOperationController implements Initializable {
       String barCode = sb.toString();
       Platform.runLater(() -> itemTable.refresh());
       Platform.runLater(() -> rootStackPane.requestFocus());
-      Platform.runLater(() -> {
-
-        ItemDto foundItem = null;
-        for (ItemDto item : itemTable.getItems()) {
-          if (barCode.equals(item.getBarcode())) {
-            item.setCount(item.getCount() + 1);
-            item.setTotalPrice(item.getCount() * item.getPrice());
-            foundItem = item;
-
-            itemTable.refresh();
-          }
-        }
-
-        if (foundItem == null) {
-          if (itemTableAddNewItem(barCode) == null) {
-            dbAddNewItem("Неизвестный товар", barcodeText -> {
-              itemTableAddNewItem(barcodeText);
-              countTotalSum();
-            });
-          }
-        }
-
-        countTotalSum();
-      });
-      return;
+      redrawTableByBarcode(barCode);
     }
+  }
+
+  private void redrawTableByBarcode(String barCode) {
+    Platform.runLater(() -> {
+
+      ItemDto foundItem = null;
+      for (ItemDto item : itemTable.getItems()) {
+        if (barCode.equals(item.getBarcode())) {
+          item.setCount(item.getCount() + 1);
+          item.setTotalPrice(item.getCount() * item.getPrice());
+          foundItem = item;
+
+          itemTable.refresh();
+        }
+      }
+
+      if (foundItem == null) {
+        if (itemTableAddNewItem(barCode) == null) {
+          dbAddNewItem("Неизвестный товар", barcodeText -> {
+            itemTableAddNewItem(barcodeText);
+            countTotalSum();
+          });
+        }
+      }
+
+      countTotalSum();
+    });
   }
 
   private Item itemTableAddNewItem(String barCode) {
@@ -191,7 +194,7 @@ public class SellOperationController implements Initializable {
   }
 
   public void addNewProduct() {
-    dbAddNewItem("Неизвестный товар", barcodeText -> countTotalSum());
+    dbAddNewItem(null, barcodeText -> countTotalSum());
   }
 
   public void cash() {
@@ -219,6 +222,26 @@ public class SellOperationController implements Initializable {
         rootStackPane.getChildren().remove(root);
         UiControllerUtil.removeOpacityRectangle(rootStackPane);
       });
+
+      UiControllerUtil.addOpacityRectangle(rootStackPane);
+      rootStackPane.getChildren().add(root);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  public void fastItem() {
+    try {
+      FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("fxml/FastOperation.fxml"));
+      loader.setControllerFactory(applicationContext::getBean);
+      Parent root = loader.load();
+      FastOperationController controller = loader.getController();
+
+      controller.callback = barCode -> {
+        redrawTableByBarcode(barCode);
+        rootStackPane.getChildren().remove(root);
+        UiControllerUtil.removeOpacityRectangle(rootStackPane);
+      };
 
       UiControllerUtil.addOpacityRectangle(rootStackPane);
       rootStackPane.getChildren().add(root);

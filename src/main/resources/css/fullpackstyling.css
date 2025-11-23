@@ -183,6 +183,17 @@
     -fx-background-color: white;
 }
 
+.fast-item-button {
+    -fx-font-size: 16px;
+    -fx-font-weight: 600;
+    -fx-text-fill: black;
+    -fx-border-color: #2f81fb;
+    -fx-border-radius: 14;
+    -fx-border-width: 2;
+    -fx-background-radius: 14;
+    -fx-background-color: white;
+}
+
 /* Заголовок */
 .custom-dialog > .header-panel {
     -fx-background-color: transparent;
