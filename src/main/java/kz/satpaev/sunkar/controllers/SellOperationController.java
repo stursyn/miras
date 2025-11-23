@@ -237,6 +237,7 @@ public class SellOperationController implements Initializable {
       Parent root = loader.load();
       FastOperationController controller = loader.getController();
 
+      Platform.runLater(()->controller.nameLike.requestFocus());
       controller.callback = barCode -> {
         redrawTableByBarcode(barCode);
         rootStackPane.getChildren().remove(root);

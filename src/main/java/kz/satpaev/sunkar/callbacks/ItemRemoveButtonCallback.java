@@ -1,5 +1,6 @@
 package kz.satpaev.sunkar.callbacks;
 
+import javafx.application.Platform;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -38,15 +39,15 @@ public class ItemRemoveButtonCallback implements Callback<TableColumn<ItemDto, S
           setGraphic(null);
         } else {
 
-          final Image delete = new Image("icons/delete.png");
-          final ImageView deleteView = new ImageView(delete);
-          final Button deleteBtn = new Button();
-          deleteBtn.getStyleClass().add("option-key");
+          final Image count = new Image("icons/inventory.png");
+          final ImageView countView = new ImageView(count);
+          final Button countBtn = new Button();
+          countBtn.getStyleClass().add("option-key");
 
-          final Image increase = new Image("icons/minus.png");
-          final ImageView increaseView = new ImageView(increase);
-          final Button increaseBtn = new Button();
-          increaseBtn.getStyleClass().add("option-key");
+          final Image decrease = new Image("icons/minus.png");
+          final ImageView decreaseView = new ImageView(decrease);
+          final Button decreaseBtn = new Button();
+          decreaseBtn.getStyleClass().add("option-key");
 
           final Image edit = new Image("icons/edit.png");
           final ImageView editView = new ImageView(edit);
@@ -55,9 +56,9 @@ public class ItemRemoveButtonCallback implements Callback<TableColumn<ItemDto, S
 
           final HBox pane = new HBox();
 
-          increaseView.setFitHeight(20);
-          increaseView.setPreserveRatio(true);
-          increaseBtn.setOnAction(event -> {
+          decreaseView.setFitHeight(20);
+          decreaseView.setPreserveRatio(true);
+          decreaseBtn.setOnAction(event -> {
             var object = getTableView().getItems().get(getIndex());
             object.setCount((object.getCount() - 1));
             if (object.getCount() == 0) {
@@ -70,18 +71,36 @@ public class ItemRemoveButtonCallback implements Callback<TableColumn<ItemDto, S
             supplier.get();
           });
 
-          increaseBtn.setPrefSize(20,20);
-          increaseBtn.setGraphic(increaseView);
+          decreaseBtn.setPrefSize(20,20);
+          decreaseBtn.setGraphic(decreaseView);
 
-          deleteView.setFitHeight(20);
-          deleteView.setPreserveRatio(true);
-          deleteBtn.setOnAction(event -> {
-                    getTableView().getItems().remove(getIndex());
-                    supplier.get();
-                  }
+          countView.setFitHeight(20);
+          countView.setPreserveRatio(true);
+          countBtn.setOnAction(event -> {
+            ItemDto itemDto = getTableView().getItems().get(getIndex());
+            new AbstractController().makeCountOfObject(rootStackPane, itemCount -> {
+              if (itemCount == null) {
+                supplier.get();
+                return;
+              }
+              Platform.runLater(() -> {
+                itemDto.setCount(itemCount);
+
+                if (itemDto.getCount() == 0) {
+                  getTableView().getItems().remove(getIndex());
+                }
+                itemDto.setTotalPrice(itemDto.getCount() * itemDto.getPrice());
+
+                getTableView().refresh();
+
+                supplier.get();
+              });
+            });
+            supplier.get();
+          }
           );
-          deleteBtn.setPrefSize(20,20);
-          deleteBtn.setGraphic(deleteView);
+          countBtn.setPrefSize(20,20);
+          countBtn.setGraphic(countView);
 
           editView.setFitHeight(20);
           editView.setPreserveRatio(true);
@@ -104,7 +123,7 @@ public class ItemRemoveButtonCallback implements Callback<TableColumn<ItemDto, S
           editBtn.setPrefSize(20,20);
           editBtn.setGraphic(editView);
 
-          pane.getChildren().addAll(editBtn, increaseBtn, deleteBtn);
+          pane.getChildren().addAll(editBtn, decreaseBtn, countBtn);
           pane.setSpacing(5);
 
           setGraphic(pane);
