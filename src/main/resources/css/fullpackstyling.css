@@ -253,3 +253,35 @@
     -fx-background-color: transparent;
     -fx-font-size: 16;
 }
+
+.card {
+    -fx-padding: 16;
+    -fx-background-color: white;
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-border-color: #E1E4E8;
+    -fx-border-width: 1;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 10, 0, 0, 2);
+}
+
+.card-title {
+    -fx-font-size: 14px;
+    -fx-text-fill: #444;
+}
+
+.card-value {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #111;
+}
+
+.card-value-negative {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #D9534F; /* красный для возвратов */
+}
+
+.card-note {
+    -fx-font-size: 12px;
+    -fx-text-fill: #777;
+}

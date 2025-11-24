@@ -4,27 +4,33 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.Pagination;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.StackPane;
 import kz.satpaev.sunkar.callbacks.ShowSaleDetailButtonCallback;
 import kz.satpaev.sunkar.model.dto.SaleDto;
+import kz.satpaev.sunkar.model.entity.PaymentType;
 import kz.satpaev.sunkar.model.entity.Sale;
+import kz.satpaev.sunkar.model.projection.SaleSummaryProjection;
 import kz.satpaev.sunkar.repository.SaleRepository;
+import kz.satpaev.sunkar.util.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.function.Supplier;
+
+import static kz.satpaev.sunkar.util.Constants.ruDateTimeFormatter;
 
 @Component
 public class SalesController implements Initializable {
@@ -50,6 +56,20 @@ public class SalesController implements Initializable {
   public TableColumn<SaleDto, String> operation;
   @FXML
   public Button cancelButton;
+  @FXML
+  public Label title;
+  @FXML
+  public Label totalAmount;
+  @FXML
+  public Label totalTransaction;
+  @FXML
+  public Label avgReceipt;
+  @FXML
+  public Label cash;
+  @FXML
+  public Label kaspi;
+  @FXML
+  public Label halyk;
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
@@ -66,9 +86,31 @@ public class SalesController implements Initializable {
     paymentType.prefWidthProperty().bind(salesTable.widthProperty().multiply(0.2));
     operation.prefWidthProperty().bind(salesTable.widthProperty().multiply(0.1));
 
-    int countAll = saleRepository.countAllBySaleTimeBetween(LocalDate.now().atStartOfDay(),
+    title.setText("Продажи за " + ruDateTimeFormatter.format(LocalDate.now()));
+
+    List<SaleSummaryProjection> saleSummary = saleRepository.saleSummaryByPaymentType(LocalDate.now().atStartOfDay(),
         LocalDate.now().atTime(LocalTime.MAX));
-    int pages = (int) Math.ceil(countAll * 1.0 / PAGE_SIZE);
+
+    BigDecimal amount = saleSummary.stream().map(SaleSummaryProjection::getTotalAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
+    totalAmount.setText(String.format("%.1f", amount) + Constants.TENGE_SUFFIX);
+    int count = saleSummary.stream().map(SaleSummaryProjection::getTotalCount).reduce(0, Integer::sum);
+    totalTransaction.setText(Integer.toString(count));
+    if (count > 0) {
+      avgReceipt.setText(String.format("%.1f", amount.divide(BigDecimal.valueOf(count), 2, RoundingMode.HALF_UP)) + Constants.TENGE_SUFFIX);
+    }
+    for (SaleSummaryProjection saleSummaryProjection : saleSummary) {
+      if (saleSummaryProjection.getPaymentType() == PaymentType.CASH) {
+        cash.setText(String.format("%.1f", saleSummaryProjection.getTotalAmount()) + Constants.TENGE_SUFFIX);
+      }
+      if (saleSummaryProjection.getPaymentType() == PaymentType.KASPI) {
+        kaspi.setText(String.format("%.1f", saleSummaryProjection.getTotalAmount()) + Constants.TENGE_SUFFIX);
+      }
+      if (saleSummaryProjection.getPaymentType() == PaymentType.HALYK) {
+        halyk.setText(String.format("%.1f", saleSummaryProjection.getTotalAmount()) + Constants.TENGE_SUFFIX);
+      }
+    }
+
+    int pages = (int) Math.ceil(count * 1.0 / PAGE_SIZE);
     pagination.setPageCount(pages);
     pagination.setPageFactory(this::loadPage);
   }

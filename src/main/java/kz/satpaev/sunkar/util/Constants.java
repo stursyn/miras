@@ -10,5 +10,7 @@ public class Constants {
   public static final KeyboardView KEYBOARD_VIEW = new KeyboardView("keyboard-full-kz.xml", "keyboard-full-us.xml");
   public static final KeyboardView KEYBOARD_VIEW_NUMERIC = new KeyboardView("keyboard-numeric.xml");
   public static DateTimeFormatter formatter =
-      DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
+      DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");;
+  public static DateTimeFormatter ruDateTimeFormatter =
+      DateTimeFormatter.ofPattern("dd.MM.yyyy");
 }
