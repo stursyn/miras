@@ -42,10 +42,13 @@ public class FastOperationController implements Initializable {
     public TextField nameLike;
     @FXML
     public GridPane productGrid;
+    @FXML
+    public Button cancelButton;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         nameLike.setOnKeyTyped(keyEvent -> searchAndRedraw(nameLike.getText()));
+        cancelButton.setOnAction(event -> callback.accept(null));
         keyboard.getChildren().add(KEYBOARD_VIEW);
     }
 

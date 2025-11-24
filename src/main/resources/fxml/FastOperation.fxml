@@ -4,22 +4,35 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="kz.satpaev.sunkar.controllers.FastOperationController"
             stylesheets="@../css/fullpackstyling.css"
             maxWidth="1000.0" maxHeight="550">
     <top>
-        <GridPane styleClass="add-grid"
-                  hgap="10" vgap="10" >
-            <padding>
-                <Insets top="10" right="10" left="10" bottom="10"/>
-            </padding>
+        <VBox maxHeight="Infinity" maxWidth="Infinity">
+            <HBox alignment="CENTER_RIGHT"
+                  spacing="10"
+                  styleClass="cancel-button-h-box">
 
-            <Label text="Название продукта для поиска" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="add-label"/>
-            <TextField fx:id="nameLike" GridPane.rowIndex="1" GridPane.columnIndex="0"
-                       GridPane.hgrow="ALWAYS" maxWidth="Infinity" />
-        </GridPane>
+                <Label text="Быстрые товары" styleClass="add-label"/>
+                <Region HBox.hgrow="ALWAYS" /> <!-- пустое пространство слева -->
+
+                <!-- Кнопка закрыть -->
+                <Button fx:id="cancelButton" text="✕" styleClass="cancel-button-btn" />
+            </HBox>
+            <GridPane styleClass="add-grid"
+                      hgap="10" vgap="10" >
+                <padding>
+                    <Insets top="10" right="10" left="10" bottom="10"/>
+                </padding>
+
+                <Label text="Название продукта для поиска" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="add-label"/>
+                <TextField fx:id="nameLike" GridPane.rowIndex="1" GridPane.columnIndex="0"
+                           GridPane.hgrow="ALWAYS" maxWidth="Infinity" />
+            </GridPane>
+        </VBox>
     </top>
     <center>
         <GridPane fx:id="productGrid" styleClass="add-grid"

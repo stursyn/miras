@@ -37,6 +37,8 @@ public class ItemController implements Initializable {
     public TextField quantity;
     @FXML
     public Button save;
+    @FXML
+    public Button cancelButton;
 
     public void keyPressed(KeyEvent event) {
         if (event.getTarget() == barcode &&

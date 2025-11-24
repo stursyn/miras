@@ -20,6 +20,8 @@ public class PaymentController implements Initializable {
   public TextField price;
   @FXML
   public Button submitButton;
+  @FXML
+  public Button cancelButton;
   @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {
     keyboard.getChildren().add(KEYBOARD_VIEW_NUMERIC);

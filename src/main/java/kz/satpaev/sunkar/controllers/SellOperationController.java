@@ -223,6 +223,11 @@ public class SellOperationController implements Initializable {
         UiControllerUtil.removeOpacityRectangle(rootStackPane);
       });
 
+      controller.cancelButton.setOnAction(event -> {
+        rootStackPane.getChildren().remove(root);
+        UiControllerUtil.removeOpacityRectangle(rootStackPane);
+      });
+
       UiControllerUtil.addOpacityRectangle(rootStackPane);
       rootStackPane.getChildren().add(root);
     } catch (IOException e) {
@@ -239,7 +244,9 @@ public class SellOperationController implements Initializable {
 
       Platform.runLater(()->controller.nameLike.requestFocus());
       controller.callback = barCode -> {
-        redrawTableByBarcode(barCode);
+        if (StringUtils.isNotEmpty(barCode)) {
+          redrawTableByBarcode(barCode);
+        }
         rootStackPane.getChildren().remove(root);
         UiControllerUtil.removeOpacityRectangle(rootStackPane);
       };
@@ -341,6 +348,11 @@ public class SellOperationController implements Initializable {
         UiControllerUtil.removeOpacityRectangle(rootStackPane);
 
         save.accept(barcodeText);
+      });
+
+      controller.cancelButton.setOnAction(event -> {
+        rootStackPane.getChildren().remove(root);
+        UiControllerUtil.removeOpacityRectangle(rootStackPane);
       });
 
       UiControllerUtil.addOpacityRectangle(rootStackPane);

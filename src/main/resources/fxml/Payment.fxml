@@ -10,6 +10,18 @@
             fx:controller="kz.satpaev.sunkar.controllers.PaymentController"
             stylesheets="@../css/fullpackstyling.css"
             maxWidth="500" maxHeight="300">
+    <top>
+        <HBox alignment="CENTER_RIGHT"
+              spacing="10"
+              styleClass="cancel-button-h-box">
+
+            <Label text="Наличными" styleClass="add-label"/>
+            <Region HBox.hgrow="ALWAYS" /> <!-- пустое пространство слева -->
+
+            <!-- Кнопка закрыть -->
+            <Button fx:id="cancelButton" text="✕" styleClass="cancel-button-btn" />
+        </HBox>
+    </top>
     <center>
         <GridPane styleClass="add-grid"
                   hgap="10" vgap="10" >

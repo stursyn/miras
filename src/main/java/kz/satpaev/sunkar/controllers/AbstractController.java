@@ -42,6 +42,13 @@ public class AbstractController {
         UiControllerUtil.removeOpacityRectangle(rootStackPane);
         callback.accept(ret);
       });
+
+      controller.cancelButton.setOnAction(event -> {
+        rootStackPane.getChildren().remove(root);
+        UiControllerUtil.removeOpacityRectangle(rootStackPane);
+        callback.accept(null);
+      });
+
       UiControllerUtil.addOpacityRectangle(rootStackPane);
       rootStackPane.getChildren().add(root);
     } catch (IOException e) {
@@ -67,6 +74,13 @@ public class AbstractController {
         } else {
           callback.accept(null);
         }
+      });
+
+      controller.cancelButton.setOnAction(event -> {
+        rootStackPane.getChildren().remove(root);
+        UiControllerUtil.removeOpacityRectangle(rootStackPane);
+
+        callback.accept(null);
       });
 
       UiControllerUtil.addOpacityRectangle(rootStackPane);

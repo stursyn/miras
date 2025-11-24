@@ -10,6 +10,17 @@
             fx:controller="kz.satpaev.sunkar.controllers.CountController"
             stylesheets="@../css/fullpackstyling.css"
             maxWidth="500" maxHeight="300">
+    <top>
+        <HBox alignment="CENTER_RIGHT"
+              spacing="10"
+              styleClass="cancel-button-h-box">
+            <Label text="Количество" styleClass="add-label"/>
+            <Region HBox.hgrow="ALWAYS" /> <!-- пустое пространство слева -->
+
+            <!-- Кнопка закрыть -->
+            <Button fx:id="cancelButton" text="✕" styleClass="cancel-button-btn" />
+        </HBox>
+    </top>
     <center>
         <GridPane styleClass="add-grid"
                   hgap="10" vgap="10" >
@@ -17,11 +28,10 @@
                 <Insets top="10" right="10" left="10" bottom="10"/>
             </padding>
 
-            <Label text="Количество:" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="add-label"/>
-            <TextField fx:id="count" GridPane.rowIndex="0" GridPane.columnIndex="1"
+            <TextField fx:id="count" GridPane.rowIndex="0" GridPane.columnIndex="0"
                        GridPane.hgrow="ALWAYS" maxWidth="Infinity" />
 
-            <Button fx:id="submitButton" text="Применить" styleClass="add-button" GridPane.rowIndex="1" GridPane.columnIndex="1" maxWidth="Infinity" />
+            <Button fx:id="submitButton" text="Применить" styleClass="add-button" GridPane.rowIndex="1" GridPane.columnIndex="0" maxWidth="Infinity" />
         </GridPane>
     </center>
     <bottom>

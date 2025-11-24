@@ -240,3 +240,15 @@
 .custom-dialog .button-bar .button:hover {
     -fx-background-color: #D6D6D6;
 }
+
+.cancel-button-h-box {
+    -fx-background-color: #F2F2F2;
+    -fx-padding: 6 10;
+    -fx-border-color: #CCCCCC;
+    -fx-border-width: 0 0 1 0;
+}
+
+.cancel-button-btn {
+    -fx-background-color: transparent;
+    -fx-font-size: 16;
+}
