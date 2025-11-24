@@ -197,6 +197,26 @@ public class SellOperationController implements Initializable {
     dbAddNewItem(null, barcodeText -> countTotalSum());
   }
 
+  public void saleHistory() {
+    try {
+      FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("fxml/Sales.fxml"));
+      loader.setControllerFactory(applicationContext::getBean);
+      Parent root = loader.load();
+      SalesController controller = loader.getController();
+
+      controller.rootStackPane = () -> rootStackPane;
+      controller.cancelButton.setOnAction(event -> {
+        rootStackPane.getChildren().remove(root);
+        UiControllerUtil.removeOpacityRectangle(rootStackPane);
+      });
+
+      UiControllerUtil.addOpacityRectangle(rootStackPane);
+      rootStackPane.getChildren().add(root);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
   public void cash() {
     try {
       FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("fxml/Payment.fxml"));

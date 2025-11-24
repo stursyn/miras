@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="kz.satpaev.sunkar.controllers.SalesController"
+            stylesheets="@../css/fullpackstyling.css"
+            maxWidth="900" maxHeight="1000">
+    <top>
+        <HBox alignment="CENTER_RIGHT"
+              spacing="10"
+              styleClass="cancel-button-h-box">
+            <Label text="Продажи за сегодня" styleClass="add-label"/>
+            <Region HBox.hgrow="ALWAYS" /> <!-- пустое пространство слева -->
+
+            <!-- Кнопка закрыть -->
+            <Button fx:id="cancelButton" text="✕" styleClass="cancel-button-btn" />
+        </HBox>
+    </top>
+    <center>
+        <VBox maxWidth="Infinity" maxHeight="Infinity" VBox.vgrow="ALWAYS">
+            <padding>
+                <Insets right="10" left="10"/>
+            </padding>
+            <TableView fx:id="salesTable" VBox.vgrow="ALWAYS" maxWidth="Infinity" maxHeight="Infinity">
+                <columns>
+                    <TableColumn fx:id="id" text="ИД" style="-fx-alignment: CENTER_LEFT"/>
+                    <TableColumn fx:id="saleTime" text="Время продажи"  style="-fx-alignment: CENTER_LEFT"/>
+                    <TableColumn fx:id="saleAmount" text="Сумма продажи"  style="-fx-alignment: CENTER_RIGHT"/>
+                    <TableColumn fx:id="paymentType" text="Тип оплаты" style="-fx-alignment: CENTER_RIGHT"/>
+                    <TableColumn fx:id="operation" text="Операции" style="-fx-alignment: CENTER"/>
+                </columns>
+            </TableView>
+        </VBox>
+        <Pagination fx:id="pagination" prefHeight="40"/>
+    </center>
+</BorderPane>

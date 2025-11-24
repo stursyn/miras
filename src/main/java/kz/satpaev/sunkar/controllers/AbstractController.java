@@ -8,6 +8,7 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import kz.satpaev.sunkar.model.dto.ItemDto;
+import kz.satpaev.sunkar.model.dto.SaleDto;
 import kz.satpaev.sunkar.model.entity.Item;
 import kz.satpaev.sunkar.model.entity.PaymentType;
 import kz.satpaev.sunkar.util.UiControllerUtil;
@@ -83,6 +84,27 @@ public class AbstractController {
         callback.accept(null);
       });
 
+      UiControllerUtil.addOpacityRectangle(rootStackPane);
+      rootStackPane.getChildren().add(root);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  public void showSaleDetail(StackPane rootStackPane, SaleDto saleDto, Consumer<String> callback) {
+    try {
+      FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("fxml/SaleDetail.fxml"));
+      loader.setControllerFactory(applicationContext::getBean);
+      Parent root = loader.load();
+      SaleDetailController controller = loader.getController();
+      controller.saleId = saleDto::getId;
+      controller.cancelButton.setOnAction(event -> {
+        rootStackPane.getChildren().remove(root);
+        UiControllerUtil.removeOpacityRectangle(rootStackPane);
+
+        callback.accept(null);
+      });
+      controller.loadTable();
       UiControllerUtil.addOpacityRectangle(rootStackPane);
       rootStackPane.getChildren().add(root);
     } catch (IOException e) {

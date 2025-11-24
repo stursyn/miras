@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="kz.satpaev.sunkar.controllers.SaleDetailController"
+            stylesheets="@../css/fullpackstyling.css"
+            maxWidth="700" maxHeight="800">
+    <top>
+        <HBox alignment="CENTER_RIGHT"
+              spacing="10"
+              styleClass="cancel-button-h-box">
+            <Label text="Продажа" styleClass="add-label"/>
+            <Region HBox.hgrow="ALWAYS" /> <!-- пустое пространство слева -->
+
+            <!-- Кнопка закрыть -->
+            <Button fx:id="cancelButton" text="✕" styleClass="cancel-button-btn" />
+        </HBox>
+    </top>
+    <center>
+        <VBox maxWidth="Infinity" maxHeight="Infinity" VBox.vgrow="ALWAYS">
+            <TableView fx:id="saleItemTable" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn fx:id="barcode" text="Код" style="-fx-alignment: CENTER_LEFT"/>
+                    <TableColumn fx:id="itemName" text="Наименование"  style="-fx-alignment: CENTER_LEFT"/>
+                    <TableColumn fx:id="price" text="Цена"  style="-fx-alignment: CENTER_RIGHT"/>
+                    <TableColumn fx:id="count" text="Количество" style="-fx-alignment: CENTER_RIGHT"/>
+                    <TableColumn fx:id="totalPrice" text="Сумма" style="-fx-alignment: CENTER_RIGHT"/>
+                    <TableColumn fx:id="operation" text="Операции" style="-fx-alignment: CENTER"/>
+                </columns>
+            </TableView>
+        </VBox>
+    </center>
+</BorderPane>
