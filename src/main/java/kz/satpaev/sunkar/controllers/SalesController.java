@@ -30,6 +30,7 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.function.Supplier;
 
+import static kz.satpaev.sunkar.util.Constants.TENGE_SUFFIX;
 import static kz.satpaev.sunkar.util.Constants.ruDateTimeFormatter;
 
 @Component
@@ -61,7 +62,7 @@ public class SalesController implements Initializable {
   @FXML
   public Label totalAmount;
   @FXML
-  public Label totalTransaction;
+  public Label totalAmountNote;
   @FXML
   public Label avgReceipt;
   @FXML
@@ -70,6 +71,8 @@ public class SalesController implements Initializable {
   public Label kaspi;
   @FXML
   public Label halyk;
+  @FXML
+  public Label duty;
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
@@ -92,9 +95,9 @@ public class SalesController implements Initializable {
         LocalDate.now().atTime(LocalTime.MAX));
 
     BigDecimal amount = saleSummary.stream().map(SaleSummaryProjection::getTotalAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
-    totalAmount.setText(String.format("%.1f", amount) + Constants.TENGE_SUFFIX);
     int count = saleSummary.stream().map(SaleSummaryProjection::getTotalCount).reduce(0, Integer::sum);
-    totalTransaction.setText(Integer.toString(count));
+    totalAmount.setText(String.format("%.1f", amount) + TENGE_SUFFIX);
+    totalAmountNote.setText(String.format("в рамках %d транзакции", count));
     if (count > 0) {
       avgReceipt.setText(String.format("%.1f", amount.divide(BigDecimal.valueOf(count), 2, RoundingMode.HALF_UP)) + Constants.TENGE_SUFFIX);
     }
@@ -108,6 +111,9 @@ public class SalesController implements Initializable {
       if (saleSummaryProjection.getPaymentType() == PaymentType.HALYK) {
         halyk.setText(String.format("%.1f", saleSummaryProjection.getTotalAmount()) + Constants.TENGE_SUFFIX);
       }
+      if (saleSummaryProjection.getPaymentType() == PaymentType.DUTY) {
+        duty.setText(String.format("%.1f", saleSummaryProjection.getTotalAmount()) + Constants.TENGE_SUFFIX);
+      }
     }
 
     int pages = (int) Math.ceil(count * 1.0 / PAGE_SIZE);
@@ -116,7 +122,6 @@ public class SalesController implements Initializable {
   }
 
   private Node loadPage(int pageIndex) {
-    System.out.println("Loading page " + pageIndex);
     Page<Sale> dbSales = saleRepository.findAllBySaleTimeBetween(LocalDate.now().atStartOfDay(),
         LocalDate.now().atTime(LocalTime.MAX), PageRequest.of(
             pageIndex, PAGE_SIZE,

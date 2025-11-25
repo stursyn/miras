@@ -267,6 +267,7 @@
 .card-title {
     -fx-font-size: 14px;
     -fx-text-fill: #444;
+    -fx-wrap-text: true;
 }
 
 .card-value {

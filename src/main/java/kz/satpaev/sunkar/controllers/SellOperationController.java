@@ -86,6 +86,8 @@ public class SellOperationController implements Initializable {
   private Button byCard;
   @FXML
   private Button qrKaspi;
+  @FXML
+  private Button duty;
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
@@ -116,6 +118,10 @@ public class SellOperationController implements Initializable {
     });
     qrKaspi.setOnAction(event -> {
       paidRegister(PaymentType.KASPI);
+      clearAll();
+    });
+    duty.setOnAction(event -> {
+      paidRegister(PaymentType.DUTY);
       clearAll();
     });
 

@@ -30,36 +30,36 @@
             </columnConstraints>
             <!-- Card 1 — Total Sales -->
             <VBox spacing="4" styleClass="card" GridPane.rowIndex="0" GridPane.columnIndex="0" maxWidth="Infinity" maxHeight="Infinity" >
-                <Label text="Общая сумма продаж" styleClass="card-title"/>
+                <Label text="Общая сумма продаж" styleClass="card-title" wrapText="true"/>
                 <Label fx:id="totalAmount" text="0.0 тг." styleClass="card-value"/>
-            </VBox>
-
-            <!-- Card 2 — Total Receipts -->
-            <VBox spacing="4" styleClass="card" GridPane.rowIndex="0" GridPane.columnIndex="1" maxWidth="Infinity" maxHeight="Infinity" >
-                <Label text="Всего транзакций" styleClass="card-title"/>
-                <Label fx:id="totalTransaction" text="0" styleClass="card-value"/>
+                <Label fx:id="totalAmountNote" styleClass="card-note"/>
             </VBox>
 
             <!-- Card 3 — Avg Receipt -->
-            <VBox spacing="4" styleClass="card" GridPane.rowIndex="0" GridPane.columnIndex="2" maxWidth="Infinity" maxHeight="Infinity" >
+            <VBox spacing="4" styleClass="card" GridPane.rowIndex="0" GridPane.columnIndex="1" maxWidth="Infinity" maxHeight="Infinity" >
                 <Label text="Средний чек" styleClass="card-title"/>
                 <Label fx:id="avgReceipt" text="0.0 тг." styleClass="card-value"/>
             </VBox>
 
             <!-- Row 2 -->
-            <VBox spacing="4" styleClass="card" GridPane.rowIndex="0" GridPane.columnIndex="3" maxWidth="Infinity" maxHeight="Infinity" >
+            <VBox spacing="4" styleClass="card" GridPane.rowIndex="0" GridPane.columnIndex="2" maxWidth="Infinity" maxHeight="Infinity" >
                 <Label text="Наличные платежи" styleClass="card-title"/>
                 <Label fx:id="cash" text="0.0 тг." styleClass="card-value"/>
             </VBox>
 
-            <VBox spacing="4" styleClass="card" GridPane.rowIndex="0" GridPane.columnIndex="4" maxWidth="Infinity" maxHeight="Infinity" >
+            <VBox spacing="4" styleClass="card" GridPane.rowIndex="0" GridPane.columnIndex="3" maxWidth="Infinity" maxHeight="Infinity" >
                 <Label text="Kaspi" styleClass="card-title"/>
                 <Label fx:id="kaspi" text="0.0 тг." styleClass="card-value"/>
             </VBox>
 
-            <VBox spacing="4" styleClass="card" GridPane.rowIndex="0" GridPane.columnIndex="5" maxWidth="Infinity" maxHeight="Infinity" >
+            <VBox spacing="4" styleClass="card" GridPane.rowIndex="0" GridPane.columnIndex="4" maxWidth="Infinity" maxHeight="Infinity" >
                 <Label text="Halyk" styleClass="card-title"/>
                 <Label fx:id="halyk" text="0.0 тг." styleClass="card-value"/>
+            </VBox>
+
+            <VBox spacing="4" styleClass="card" GridPane.rowIndex="0" GridPane.columnIndex="5" maxWidth="Infinity" maxHeight="Infinity" >
+                <Label text="Долг" styleClass="card-title"/>
+                <Label fx:id="duty" text="0.0 тг." styleClass="card-value"/>
             </VBox>
         </GridPane>
         </VBox>
