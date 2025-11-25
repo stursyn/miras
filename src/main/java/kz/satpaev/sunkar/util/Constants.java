@@ -15,4 +15,7 @@ public class Constants {
       DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");;
   public static DateTimeFormatter ruDateTimeFormatter =
       DateTimeFormatter.ofPattern("dd.MM.yyyy");
+
+  public static final String KZ_GS1_CODE = "487";
+  public static final String MERCHANT_CODE = "26";
 }

@@ -1,6 +1,7 @@
 package kz.satpaev.sunkar.controllers;
 
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -21,15 +22,11 @@ import kz.satpaev.sunkar.repository.ItemRepository;
 import kz.satpaev.sunkar.repository.SaleItemRepository;
 import kz.satpaev.sunkar.repository.SaleRepository;
 import kz.satpaev.sunkar.repository.SubItemRepository;
-import kz.satpaev.sunkar.service.NiimbotB1PrinterService;
-import kz.satpaev.sunkar.service.StickerService;
 import kz.satpaev.sunkar.util.UiControllerUtil;
-import lombok.SneakyThrows;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URL;
@@ -39,7 +36,6 @@ import java.util.ResourceBundle;
 import java.util.function.Consumer;
 
 import static kz.satpaev.sunkar.Main.applicationContext;
-import static kz.satpaev.sunkar.util.AppUtil.ean13Checksum;
 import static kz.satpaev.sunkar.util.Constants.*;
 
 @Component
@@ -128,7 +124,7 @@ public class SellOperationController implements Initializable {
     paidAmount.setText(0 + TENGE_SUFFIX);
     returnAmount.setText(0 + TENGE_SUFFIX);
 
-    KEYBOARD_VIEW.setMode(KeyboardView.Mode.SYMBOLS);
+    KEYBOARD_VIEW.setMode(KeyboardView.Mode.STANDARD);
   }
 
   public void keyPressed(KeyEvent event) {
@@ -150,8 +146,33 @@ public class SellOperationController implements Initializable {
       String barCode = sb.toString();
       Platform.runLater(() -> itemTable.refresh());
       Platform.runLater(() -> rootStackPane.requestFocus());
-      redrawTableByBarcode(barCode);
+      if (barCode.startsWith(MERCHANT_CODE+KZ_GS1_CODE)) {
+        searchInSubItem(barCode);
+      } else {
+        redrawTableByBarcode(barCode);
+      }
     }
+  }
+
+  private void searchInSubItem(String barCode) {
+    Platform.runLater(() -> {
+      SubItem subItem = subItemRepository.findItemByCode(barCode);
+      if(subItem != null) {
+        Item dbItem = itemRepository.findItemByBarcode(subItem.getParentBarCode());
+        if (dbItem != null) {
+          ItemDto displayItem = new ItemDto();
+          displayItem.setBarcode(subItem.getCode());
+          displayItem.setItemName(dbItem.getName());
+          if (subItem.getSellPrice() != null) {
+            displayItem.setPrice(subItem.getSellPrice().doubleValue());
+          }
+          displayItem.setCount(1);
+          displayItem.setTotalPrice(displayItem.getCount() * displayItem.getPrice());
+          itemTable.getItems().add(displayItem);
+        }
+      }
+      countTotalSum();
+    });
   }
 
   private void redrawTableByBarcode(String barCode) {
@@ -340,51 +361,6 @@ public class SellOperationController implements Initializable {
     }
   }
 
-  @SneakyThrows
-  public static BufferedImage getImage() {
-    var item = new Item();
-    item.setName("Fan Chips Красная Икра 120г");
-    item.setSellPrice(new BigDecimal(400));
-    item.setWeight(new BigDecimal(200));
-    // --- Barcode (EAN-13) ---
-    String ean12 = "123344534521";
-    item.setBarcode(ean12 + ean13Checksum(ean12));
-    return new StickerService().renderSticker(item);
-  }
-
-  @SneakyThrows
-  public static BufferedImage getImageLine() {
-    var item = new Item();
-    item.setName("Fan Chips Красная Икра 120г");
-    item.setSellPrice(new BigDecimal(400));
-    item.setWeight(new BigDecimal(200));
-    // --- Barcode (EAN-13) ---
-    String ean12 = "123344534521";
-    item.setBarcode(ean12 + ean13Checksum(ean12));
-    return new StickerService().renderStickerDemo(item);
-  }
-
-
-  public void printFile() {
-    try (var printer = new NiimbotB1PrinterService("COM3", 9600)) {
-      printer.print(getImage());
-      System.out.println("finish printing");
-    } catch (Exception e) {
-      System.err.println(e.getMessage());
-    }
-    System.out.println("finish method");
-  }
-
-  public void printFileLine() {
-    try (var printer = new NiimbotB1PrinterService("COM3", 9600)) {
-      printer.print(getImageLine());
-      System.out.println("finish printing");
-    } catch (Exception e) {
-      System.err.println(e.getMessage());
-    }
-    System.out.println("finish method");
-  }
-
   public void paidRegister(PaymentType paymentType) {
     if (itemTable.getItems().size() <= 0) return;
 
@@ -431,6 +407,27 @@ public class SellOperationController implements Initializable {
 
         save.accept(barcodeText);
       });
+
+      controller.cancelButton.setOnAction(event -> {
+        rootStackPane.getChildren().remove(root);
+        UiControllerUtil.removeOpacityRectangle(rootStackPane);
+      });
+
+      UiControllerUtil.addOpacityRectangle(rootStackPane);
+      rootStackPane.getChildren().add(root);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  public void addSubItem() {
+    try {
+      FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("fxml/WeightedItem.fxml"));
+      loader.setControllerFactory(applicationContext::getBean);
+      Parent root = loader.load();
+      WeightedItemController controller = loader.getController();
+
+      Platform.runLater(() -> controller.barcode.requestFocus());
 
       controller.cancelButton.setOnAction(event -> {
         rootStackPane.getChildren().remove(root);

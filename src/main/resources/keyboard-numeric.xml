@@ -5,6 +5,8 @@
             <key chars="7"/>
             <key chars="8"/>
             <key chars="9"/>
+            <key chars="500"/>
+            <key chars="1000"/>
         </keys>
     </row>
     <row>
@@ -12,6 +14,8 @@
             <key chars="4"/>
             <key chars="5"/>
             <key chars="6"/>
+            <key chars="2000"/>
+            <key chars="5000"/>
         </keys>
     </row>
     <row>
@@ -19,13 +23,15 @@
             <key chars="1"/>
             <key chars="2"/>
             <key chars="3"/>
+            <key chars="10000"/>
+            <key chars="20000"/>
         </keys>
     </row>
     <row>
         <keys>
             <key chars="."/>
-            <key chars="0"/>
-            <special type="BACKSPACE" alignment="BOTTOM_RIGHT"/>
+            <key chars="0" cols="8"/>
+            <special type="BACKSPACE" alignment="BOTTOM_RIGHT" cols="8"/>
         </keys>
     </row>
 </keyboard>

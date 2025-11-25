@@ -295,3 +295,91 @@
     -fx-font-size: 12px;
     -fx-text-fill: #777;
 }
+
+.menu-h-box {
+    -fx-background-color: linear-gradient(to bottom, #025ab5 0%, #0153a5 100%);
+    -fx-font-family: "Segoe UI", "Roboto", "System";
+}
+
+.menu-bar {
+    -fx-background-color: linear-gradient(to bottom, #025ab5 0%, #0153a5 100%);
+    -fx-font-family: "Segoe UI", "Roboto", "System";
+    -fx-padding: 5 5 5 5;
+}
+
+.menu-button {
+     -fx-background-color: transparent;
+     -fx-border-color: white;
+     -fx-border-width: 0.5;
+     -fx-border-radius: 5;
+     -fx-text-fill: white;
+     -fx-pref-width: 200;
+     -fx-font-size: 18px;
+     -fx-padding: 2 4 2 4;
+     -fx-cursor: hand;
+     -fx-background-radius: 12;
+     -fx-effect: null;
+     -fx-opacity: 0.95;
+ }
+
+/* Hover эффект */
+.menu-button:hover {
+    -fx-background-color: rgba(255,255,255,0.02);
+}
+
+.menu-bar .menu {
+    -fx-background-color: linear-gradient(to bottom, #025ab5 0%, #0153a5 100%);
+}
+
+.menu-bar .menu .label {
+    -fx-text-fill: white;
+    -fx-alignment: center;
+    -fx-text-alignment: center;
+    -fx-content-display: center;
+}
+
+.menu-bar .menu > .label {
+    -fx-alignment: center;
+    -fx-text-alignment: center;
+    -fx-content-display: center;
+}
+
+.menu-bar .menu:hover .label {
+    -fx-text-fill: #d0e7ff;
+}
+
+/* Выделенная кнопка (selected) — светло-синий фон */
+.menu-button.selected {
+    -fx-background-color: linear-gradient(to right, rgba(40,88,150,0.95), rgba(32,78,136,0.95));
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(gaussian, rgba(20,60,120,0.25), 8, 0.2, 0, 3);
+}
+
+/* Фон выпадающего меню (всего списка) */
+.context-menu {
+    -fx-background-color: #1f2d3a;       /* цвет фона списка */
+    -fx-padding: 6;
+    -fx-background-radius: 6px;
+    -fx-pref-width: 200;
+}
+
+/* Пункт меню */
+.menu-item {
+    -fx-background-color: transparent;
+}
+
+/* Текст пункта меню */
+.menu-item .label {
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+}
+
+/* Наведение */
+.menu-item:hover {
+    -fx-background-color: #2e4052;
+}
+
+/* Выбранный */
+.menu-item:focused {
+    -fx-background-color: #37506a;
+}

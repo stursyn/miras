@@ -53,7 +53,7 @@ public class FastOperationController implements Initializable {
     }
 
     public void searchAndRedraw(String text) {
-        List<Item> itemByNameLikeIgnoreCase = itemRepository.findItemByNameLikeIgnoreCase("%" + text + "%", Pageable.ofSize(10));
+        List<Item> itemByNameLikeIgnoreCase = itemRepository.findItemByBarcodeLikeIgnoreCase("%" + text + "%", Pageable.ofSize(10));
         Platform.runLater(() -> drawGrid(itemByNameLikeIgnoreCase));
     }
 

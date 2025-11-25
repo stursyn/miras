@@ -99,4 +99,16 @@ public class AppUtil {
         int mod = sum % 10;
         return mod == 0 ? 0 : 10 - mod;
     }
+
+    public static String generateBarcode(long seq) {
+        String elment12 = Constants.MERCHANT_CODE +
+            Constants.KZ_GS1_CODE +
+            fillZero(seq);
+        return elment12 + ean13Checksum(elment12);
+    }
+
+    private static String fillZero(long seq) {
+        int count = (seq + "").length();
+      return "0".repeat(Math.max(0, 7 - count)) + seq;
+    }
 }

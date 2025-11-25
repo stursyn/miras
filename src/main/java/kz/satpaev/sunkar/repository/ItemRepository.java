@@ -11,5 +11,5 @@ import java.util.List;
 public interface ItemRepository extends JpaRepository<Item, Long> {
   Item findItemByBarcode(String barCode);
 
-  List<Item> findItemByNameLikeIgnoreCase(String name, Pageable pageable);
+  List<Item> findItemByBarcodeLikeIgnoreCase(String name, Pageable pageable);
 }
