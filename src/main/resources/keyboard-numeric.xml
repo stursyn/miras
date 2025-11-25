@@ -23,8 +23,9 @@
     </row>
     <row>
         <keys>
-            <key chars="0" cols="8"/>
             <key chars="."/>
+            <key chars="0"/>
+            <special type="BACKSPACE" alignment="BOTTOM_RIGHT"/>
         </keys>
     </row>
 </keyboard>
