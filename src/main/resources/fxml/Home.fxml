@@ -20,8 +20,8 @@
                <MenuItem text="Добавить весовой" onAction="#addSubItem"/>
             </Menu>
             <Menu text="История продаж" styleClass="menu-button">
-               <MenuItem text="За сегодня" onAction="#saleHistory"/>
-               <MenuItem text="За дату"/>
+               <MenuItem text="За сегодня" onAction="#todayHistory"/>
+               <MenuItem text="За дату" onAction="#historyByDate"/>
             </Menu>
          </MenuBar>
       </HBox>

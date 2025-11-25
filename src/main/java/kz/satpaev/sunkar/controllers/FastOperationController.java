@@ -11,6 +11,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import kz.satpaev.sunkar.controllers.keyboardfx.Keyboard;
+import kz.satpaev.sunkar.controllers.keyboardfx.KeyboardView;
 import kz.satpaev.sunkar.controllers.keyboardfx.skins.KeyView;
 import kz.satpaev.sunkar.controllers.keyboardfx.skins.KeyViewBase;
 import kz.satpaev.sunkar.controllers.keyboardfx.skins.SpecialKeyView;
@@ -49,6 +50,7 @@ public class FastOperationController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         nameLike.setOnKeyTyped(keyEvent -> searchAndRedraw(nameLike.getText()));
         cancelButton.setOnAction(event -> callback.accept(null));
+        KEYBOARD_VIEW.setMode(KeyboardView.Mode.STANDARD);
         keyboard.getChildren().add(KEYBOARD_VIEW);
     }
 

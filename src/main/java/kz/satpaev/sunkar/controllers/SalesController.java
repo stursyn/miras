@@ -37,6 +37,7 @@ import static kz.satpaev.sunkar.util.Constants.ruDateTimeFormatter;
 public class SalesController implements Initializable {
   private static int PAGE_SIZE = 30;
   public Supplier<StackPane> rootStackPane = () -> null;
+  public LocalDate workingDate = LocalDate.now();
 
   @Autowired
   private SaleRepository saleRepository;
@@ -88,11 +89,14 @@ public class SalesController implements Initializable {
     saleAmount.prefWidthProperty().bind(salesTable.widthProperty().multiply(0.2));
     paymentType.prefWidthProperty().bind(salesTable.widthProperty().multiply(0.2));
     operation.prefWidthProperty().bind(salesTable.widthProperty().multiply(0.1));
+  }
 
-    title.setText("Продажи за " + ruDateTimeFormatter.format(LocalDate.now()));
+  public void loadSales(LocalDate date) {
+    workingDate = date;
+    title.setText("Продажи за " + ruDateTimeFormatter.format(date));
 
-    List<SaleSummaryProjection> saleSummary = saleRepository.saleSummaryByPaymentType(LocalDate.now().atStartOfDay(),
-        LocalDate.now().atTime(LocalTime.MAX));
+    List<SaleSummaryProjection> saleSummary = saleRepository.saleSummaryByPaymentType(date.atStartOfDay(),
+        date.atTime(LocalTime.MAX));
 
     BigDecimal amount = saleSummary.stream().map(SaleSummaryProjection::getTotalAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
     int count = saleSummary.stream().map(SaleSummaryProjection::getTotalCount).reduce(0, Integer::sum);
@@ -122,8 +126,8 @@ public class SalesController implements Initializable {
   }
 
   private Node loadPage(int pageIndex) {
-    Page<Sale> dbSales = saleRepository.findAllBySaleTimeBetween(LocalDate.now().atStartOfDay(),
-        LocalDate.now().atTime(LocalTime.MAX), PageRequest.of(
+    Page<Sale> dbSales = saleRepository.findAllBySaleTimeBetween(workingDate.atStartOfDay(),
+        workingDate.atTime(LocalTime.MAX), PageRequest.of(
             pageIndex, PAGE_SIZE,
             Sort.by("saleTime").descending()
         )

@@ -1,7 +1,6 @@
 package kz.satpaev.sunkar.controllers;
 
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -30,6 +29,7 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URL;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -223,7 +223,7 @@ public class SellOperationController implements Initializable {
     dbAddNewItem(null, barcodeText -> countTotalSum());
   }
 
-  public void saleHistory() {
+  public void saleHistory(LocalDate date) {
     try {
       FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("fxml/Sales.fxml"));
       loader.setControllerFactory(applicationContext::getBean);
@@ -231,6 +231,7 @@ public class SellOperationController implements Initializable {
       SalesController controller = loader.getController();
 
       controller.rootStackPane = () -> rootStackPane;
+      controller.loadSales(date);
       controller.cancelButton.setOnAction(event -> {
         rootStackPane.getChildren().remove(root);
         UiControllerUtil.removeOpacityRectangle(rootStackPane);
@@ -242,7 +243,35 @@ public class SellOperationController implements Initializable {
       e.printStackTrace();
     }
   }
+  public void todayHistory() {
+    saleHistory(LocalDate.now());
+  }
+  public void historyByDate() {
+    try {
+      FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("fxml/DatePicker.fxml"));
+      loader.setControllerFactory(applicationContext::getBean);
+      Parent root = loader.load();
+      DatePickerController controller = loader.getController();
 
+      controller.myDatePicker.setOnAction(event -> {
+        var pickedDate = controller.myDatePicker.getValue();
+        rootStackPane.getChildren().remove(root);
+        UiControllerUtil.removeOpacityRectangle(rootStackPane);
+
+        saleHistory(pickedDate);
+      });
+
+      controller.cancelButton.setOnAction(event -> {
+        rootStackPane.getChildren().remove(root);
+        UiControllerUtil.removeOpacityRectangle(rootStackPane);
+      });
+
+      UiControllerUtil.addOpacityRectangle(rootStackPane);
+      rootStackPane.getChildren().add(root);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
 
   public void universalItem() {
     try {
