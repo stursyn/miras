@@ -7,4 +7,13 @@
     <changeSet author="seiit" id="import data">
         <sqlFile path="db/changelog/v0.0.1_ddl/data_sql_2.sql"/>
     </changeSet>
+    <changeSet author="seiit" id="insert universal product">
+        <insert tableName="item">
+            <column name="barcode">UniversalProduct</column>
+            <column name="name">Универсальный продукт</column>
+            <column name="sell_price">0</column>
+            <column name="current_quantity">0</column>
+            <column name="can_have_sub_items">true</column>
+        </insert>
+    </changeSet>
 </databaseChangeLog>

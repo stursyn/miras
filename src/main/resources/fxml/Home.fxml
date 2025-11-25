@@ -82,7 +82,8 @@
             </rowConstraints>
 
             <Button text="ИСТОРИЯ ПРОДАЖ ЗА СЕГОДНЯ" wrapText="true" onAction="#saleHistory" styleClass="red-button, wrap-button" GridPane.rowIndex="2" GridPane.columnIndex="0" maxWidth="Infinity" maxHeight="Infinity" />
-            <Button text="ДОБАВИТЬ ТОВАР" wrapText="true" onAction="#addNewProduct" styleClass="green-button, wrap-button" GridPane.rowIndex="0" GridPane.columnIndex="1" maxWidth="Infinity" maxHeight="Infinity" />
+            <Button text="ДОБАВИТЬ ТОВАР" wrapText="true" onAction="#addNewProduct" styleClass="green-button, wrap-button" GridPane.rowIndex="1" GridPane.columnIndex="0" maxWidth="Infinity" maxHeight="Infinity" />
+            <Button text="УНИВЕРСАЛЬНЫЙ ТОВАР" wrapText="true" onAction="#universalItem" styleClass="yellow-button, wrap-button" GridPane.rowIndex="0" GridPane.columnIndex="1" maxWidth="Infinity" maxHeight="Infinity" />
             <Button text="БЫСТРЫЕ ТОВАРЫ" wrapText="true" onAction="#fastItem" styleClass="white-button, wrap-button" GridPane.rowIndex="1" GridPane.columnIndex="1" GridPane.rowSpan="2" maxWidth="Infinity" maxHeight="Infinity" />
             <Button text="ОТМЕНА" styleClass="red-button " onAction="#clearAll" GridPane.rowIndex="0" GridPane.columnIndex="3" maxWidth="Infinity" maxHeight="Infinity" />
             <Button fx:id="cashButton" text="НАЛИЧНЫМИ" styleClass="white-button " GridPane.rowIndex="1" GridPane.columnIndex="2" maxWidth="Infinity" maxHeight="Infinity" />

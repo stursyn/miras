@@ -79,4 +79,20 @@
             <column name="payment_type" type="varchar(255)"/>
         </addColumn>
     </changeSet>
+    <changeSet author="seiit" id="modify item table 001">
+        <addColumn tableName="item">
+            <column name="deleted" type="boolean" defaultValue="false" value="false"/>
+            <column name="can_have_sub_items" type="boolean" defaultValue="false" value="false"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="create table sub item" author="seiit">
+        <createTable tableName="sub_item">
+            <column name="code" type="varchar(255)"/>
+            <column name="parent_bar_code" type="varchar(255)"/>
+            <column name="sell_price" type="numeric"/>
+            <column name="current_quantity" type="numeric"/>
+            <column name="weight" type="numeric"/>
+        </createTable>
+        <createSequence sequenceName="sub_item_seq" incrementBy="1" cacheSize="50"/>
+    </changeSet>
 </databaseChangeLog>

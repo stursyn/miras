@@ -16,13 +16,11 @@ import javafx.scene.layout.StackPane;
 import kz.satpaev.sunkar.callbacks.ItemRemoveButtonCallback;
 import kz.satpaev.sunkar.controllers.keyboardfx.KeyboardView;
 import kz.satpaev.sunkar.model.dto.ItemDto;
-import kz.satpaev.sunkar.model.entity.Item;
-import kz.satpaev.sunkar.model.entity.PaymentType;
-import kz.satpaev.sunkar.model.entity.Sale;
-import kz.satpaev.sunkar.model.entity.SaleItem;
+import kz.satpaev.sunkar.model.entity.*;
 import kz.satpaev.sunkar.repository.ItemRepository;
 import kz.satpaev.sunkar.repository.SaleItemRepository;
 import kz.satpaev.sunkar.repository.SaleRepository;
+import kz.satpaev.sunkar.repository.SubItemRepository;
 import kz.satpaev.sunkar.service.NiimbotB1PrinterService;
 import kz.satpaev.sunkar.service.StickerService;
 import kz.satpaev.sunkar.util.UiControllerUtil;
@@ -42,8 +40,7 @@ import java.util.function.Consumer;
 
 import static kz.satpaev.sunkar.Main.applicationContext;
 import static kz.satpaev.sunkar.util.AppUtil.ean13Checksum;
-import static kz.satpaev.sunkar.util.Constants.KEYBOARD_VIEW;
-import static kz.satpaev.sunkar.util.Constants.TENGE_SUFFIX;
+import static kz.satpaev.sunkar.util.Constants.*;
 
 @Component
 public class SellOperationController implements Initializable {
@@ -57,6 +54,8 @@ public class SellOperationController implements Initializable {
   private SaleRepository saleRepository;
   @Autowired
   private SaleItemRepository sellItemRepository;
+  @Autowired
+  private SubItemRepository subItemRepository;
 
   @FXML
   private StackPane rootStackPane;
@@ -221,6 +220,63 @@ public class SellOperationController implements Initializable {
     } catch (IOException e) {
       e.printStackTrace();
     }
+  }
+
+
+  public void universalItem() {
+    try {
+      FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("fxml/UniversalItem.fxml"));
+      loader.setControllerFactory(applicationContext::getBean);
+      Parent root = loader.load();
+      UniversalItemController controller = loader.getController();
+
+      Platform.runLater(() -> controller.price.requestFocus());
+
+      controller.submitButton.setOnAction(event -> {
+        String text = controller.price.getText();
+        if (StringUtils.isNotEmpty(text)) {
+          try {
+            BigDecimal price = new BigDecimal(text);
+            var subItem = createSubItem(subItemRepository.subItemSeqNextVal(), price);
+            ItemDto newItem = new ItemDto();
+            newItem.setBarcode(subItem.getCode());
+            newItem.setItemName(UNIVERSAL_PRODUCT_TITLE);
+            newItem.setPrice(price.doubleValue());
+            newItem.setCount(1);
+            newItem.setTotalPrice(price.doubleValue() * newItem.getCount());
+            Platform.runLater(()->{
+              itemTable.getItems().add(newItem);
+              itemTable.refresh();
+              countTotalSum();
+            });
+          } catch (Exception ex) {
+            ex.printStackTrace();
+          }
+        }
+
+        rootStackPane.getChildren().remove(root);
+        UiControllerUtil.removeOpacityRectangle(rootStackPane);
+      });
+
+      controller.cancelButton.setOnAction(event -> {
+        rootStackPane.getChildren().remove(root);
+        UiControllerUtil.removeOpacityRectangle(rootStackPane);
+      });
+
+      UiControllerUtil.addOpacityRectangle(rootStackPane);
+      rootStackPane.getChildren().add(root);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  private SubItem createSubItem(Long seq, BigDecimal price) {
+    SubItem subItem = new SubItem();
+    subItem.setCode(UNIVERSAL_PRODUCT_BARCODE + "_" + seq);
+    subItem.setCurrentQuantity(0);
+    subItem.setSellPrice(price);
+    subItem.setParentBarCode(UNIVERSAL_PRODUCT_BARCODE);
+    return subItemRepository.save(subItem);
   }
 
   public void cash() {

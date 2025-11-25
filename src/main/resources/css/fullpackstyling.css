@@ -157,6 +157,15 @@
     -fx-background-color: white;
 }
 
+.yellow-button {
+    -fx-font-size: 16px;
+    -fx-font-weight: 600;
+    -fx-text-fill: black;
+    -fx-background-radius: 14;
+    -fx-background-color: #e6ec33;
+}
+
+
 .green-button {
     -fx-font-size: 16px;
     -fx-font-weight: 600;
