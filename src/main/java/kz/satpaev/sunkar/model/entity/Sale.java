@@ -17,5 +17,9 @@ public class Sale {
     @Enumerated(EnumType.STRING)
     private PaymentType paymentType;
     private BigDecimal amount;
+    private BigDecimal kaspiAmount;
+    private BigDecimal cashAmount;
+    private BigDecimal halykAmount;
+    private BigDecimal dutyAmount;
     private LocalDateTime saleTime;
 }

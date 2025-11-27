@@ -60,13 +60,28 @@
                <Label HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
                <Label fx:id="totalSum"/>
             </HBox>
-            <VBox maxWidth="Infinity" maxHeight="Infinity" spacing="10" styleClass="other-label">
+            <VBox maxWidth="Infinity" maxHeight="Infinity" spacing="5" styleClass="other-label">
                <HBox maxWidth="Infinity" maxHeight="Infinity">
-                  <Label text="Получено"/>
+                  <Label text="Наличными"/>
                   <Label HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
                   <Label fx:id="paidAmount"/>
                </HBox>
                <HBox maxWidth="Infinity" maxHeight="Infinity">
+                  <Label text="Kaspi"/>
+                  <Label HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                  <Label fx:id="kaspiAmount"/>
+               </HBox>
+               <HBox maxWidth="Infinity" maxHeight="Infinity">
+                  <Label text="Halyk"/>
+                  <Label HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                  <Label fx:id="halykAmount"/>
+               </HBox>
+               <HBox maxWidth="Infinity" maxHeight="Infinity">
+                  <Label text="Долг"/>
+                  <Label HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                  <Label fx:id="dutyAmount"/>
+               </HBox>
+               <HBox maxWidth="Infinity" maxHeight="Infinity" styleClass="total-label">
                   <Label text="Сдача"/>
                   <Label HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
                   <Label fx:id="returnAmount"/>
@@ -79,7 +94,8 @@
                <ColumnConstraints prefWidth="200" halignment="CENTER"/>
                <ColumnConstraints prefWidth="200" halignment="CENTER"/>
                <ColumnConstraints prefWidth="200" halignment="CENTER"/>
-               <ColumnConstraints prefWidth="200" halignment="CENTER"/>
+               <ColumnConstraints prefWidth="100" halignment="CENTER"/>
+               <ColumnConstraints prefWidth="100" halignment="CENTER"/>
             </columnConstraints>
 
             <rowConstraints>
@@ -91,12 +107,13 @@
             <Button text="УНИВЕРСАЛЬНЫЙ ТОВАР" wrapText="true" onAction="#universalItem" styleClass="yellow-button, wrap-button" GridPane.rowIndex="0" GridPane.columnIndex="1" maxWidth="Infinity" maxHeight="Infinity" />
             <Button text="БЫСТРЫЕ ТОВАРЫ" wrapText="true" onAction="#fastItem" styleClass="white-button, wrap-button" GridPane.rowIndex="1" GridPane.columnIndex="1" GridPane.rowSpan="2" maxWidth="Infinity" maxHeight="Infinity" />
 
-            <Button fx:id="cashButton" text="НАЛИЧНЫМИ" styleClass="white-button " GridPane.rowIndex="1" GridPane.columnIndex="2" maxWidth="Infinity" maxHeight="Infinity" />
-            <Button fx:id="byCard" text="HALYK"  styleClass="white-button " GridPane.rowIndex="2" GridPane.columnIndex="2" maxWidth="Infinity"  maxHeight="Infinity"  />
+            <Button fx:id="cashButton" text="НАЛИЧНЫМИ" styleClass="white-button" GridPane.rowIndex="1" GridPane.columnIndex="2" maxWidth="Infinity" maxHeight="Infinity" />
+            <Button fx:id="byCard" text="HALYK"  styleClass="white-button" GridPane.rowIndex="2" GridPane.columnIndex="2" maxWidth="Infinity"  maxHeight="Infinity"  />
 
-            <Button text="ОТМЕНА" styleClass="red-button " onAction="#clearAll" GridPane.rowIndex="0" GridPane.columnIndex="3" maxWidth="Infinity" maxHeight="Infinity" />
+            <Button text="ОТМЕНА" styleClass="red-button " onAction="#clearAll" GridPane.rowIndex="0" GridPane.columnIndex="3" GridPane.columnSpan="2" maxWidth="Infinity" maxHeight="Infinity" />
             <Button fx:id="duty" text="ДОЛГ" styleClass="white-button" GridPane.rowIndex="1" GridPane.columnIndex="3" maxWidth="Infinity"  maxHeight="Infinity" />
-            <Button fx:id="qrKaspi" text="KASPI" styleClass="qr-kaspi-button" GridPane.rowIndex="2" GridPane.columnIndex="3" maxWidth="Infinity"  maxHeight="Infinity" />
+            <Button fx:id="combinedButton" text="CASH/  KASPI" styleClass="white-button" GridPane.rowIndex="1" GridPane.columnIndex="4" maxWidth="Infinity" maxHeight="Infinity" />
+            <Button fx:id="qrKaspi" text="KASPI" styleClass="qr-kaspi-button" GridPane.rowIndex="2" GridPane.columnIndex="3" GridPane.columnSpan="2" maxWidth="Infinity"  maxHeight="Infinity" />
          </GridPane>
       </HBox>
    </VBox>

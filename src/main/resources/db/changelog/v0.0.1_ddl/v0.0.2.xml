@@ -16,4 +16,12 @@
             <column name="can_have_sub_items">true</column>
         </insert>
     </changeSet>
+    <changeSet author="seiit" id="migrate total amount by type">
+        <sql>
+            update sale set kaspi_amount = case when payment_type = 'KASPI' then amount else 0 end,
+                            cash_amount = case when payment_type = 'CASH' then amount else 0 end,
+                            halyk_amount = case when payment_type = 'HALYK' then amount else 0 end,
+                            duty_amount = case when payment_type = 'DUTY' then amount else 0 end;
+        </sql>
+    </changeSet>
 </databaseChangeLog>

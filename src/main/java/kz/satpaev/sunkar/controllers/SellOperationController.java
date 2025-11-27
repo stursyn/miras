@@ -13,6 +13,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
 import kz.satpaev.sunkar.callbacks.ItemRemoveButtonCallback;
 import kz.satpaev.sunkar.controllers.keyboardfx.KeyboardView;
 import kz.satpaev.sunkar.model.dto.ItemDto;
@@ -74,9 +75,17 @@ public class SellOperationController implements Initializable {
   @FXML
   private Label paidAmount;
   @FXML
+  private Label kaspiAmount;
+  @FXML
+  private Label halykAmount;
+  @FXML
+  private Label dutyAmount;
+  @FXML
   private Label returnAmount;
   @FXML
   private Button cashButton;
+  @FXML
+  private Button combinedButton;
   @FXML
   private Button byCard;
   @FXML
@@ -103,28 +112,93 @@ public class SellOperationController implements Initializable {
     count.prefWidthProperty().bind(itemTable.widthProperty().multiply(0.1));
     totalPrice.prefWidthProperty().bind(itemTable.widthProperty().multiply(0.1));
     operation.prefWidthProperty().bind(itemTable.widthProperty().multiply(0.2));
-
+    combinedButton.setOnAction(event -> {
+      combined();
+    });
     cashButton.setOnAction(event -> {
       cash();
     });
     byCard.setOnAction(event -> {
       paidRegister(PaymentType.HALYK);
-      clearAll();
+      halykAmount.setText(totalSumBD + TENGE_SUFFIX);
     });
     qrKaspi.setOnAction(event -> {
       paidRegister(PaymentType.KASPI);
-      clearAll();
+      kaspiAmount.setText(totalSumBD + TENGE_SUFFIX);
     });
     duty.setOnAction(event -> {
       paidRegister(PaymentType.DUTY);
-      clearAll();
+      dutyAmount.setText(totalSumBD + TENGE_SUFFIX);
     });
 
     countTotalSum();
     paidAmount.setText(0 + TENGE_SUFFIX);
     returnAmount.setText(0 + TENGE_SUFFIX);
+    kaspiAmount.setText(0 + TENGE_SUFFIX);
+    halykAmount.setText(0 + TENGE_SUFFIX);
+    dutyAmount.setText(0 + TENGE_SUFFIX);
 
     KEYBOARD_VIEW.setMode(KeyboardView.Mode.STANDARD);
+  }
+
+  public void combined() {
+    try {
+      FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("fxml/CombinedPayment.fxml"));
+      loader.setControllerFactory(applicationContext::getBean);
+      Parent root = loader.load();
+      CombinedPaymentController controller = loader.getController();
+
+      Platform.runLater(() -> {
+        controller.clearView();
+        controller.cashAmount.requestFocus();
+      });
+
+      controller.submitButton.setOnAction(event -> {
+        BigDecimal cash = StringUtils.isEmpty(controller.cashAmount.getText()) ? BigDecimal.ZERO : new BigDecimal(controller.cashAmount.getText());
+        BigDecimal kaspi = StringUtils.isEmpty(controller.kaspiAmount.getText()) ? BigDecimal.ZERO : new BigDecimal(controller.kaspiAmount.getText());
+        BigDecimal halyk = StringUtils.isEmpty(controller.halykAmount.getText()) ? BigDecimal.ZERO : new BigDecimal(controller.halykAmount.getText());
+        BigDecimal duty = StringUtils.isEmpty(controller.dutyAmount.getText()) ? BigDecimal.ZERO : new BigDecimal(controller.dutyAmount.getText());
+
+        BigDecimal remain = totalSumBD.subtract(cash)
+            .subtract(kaspi)
+            .subtract(halyk)
+            .subtract(duty);
+
+        if (BigDecimal.ZERO.compareTo(remain) > 0) {
+          UiControllerUtil.show((Stage) rootStackPane.getScene().getWindow(), "Сумма платежа не может быть больше ожидаемой суммы платежа", 1000);
+          return;
+        }
+
+        if (controller.kaspi.isSelected() && BigDecimal.ZERO.compareTo(kaspi) >= 0) {
+          kaspi = remain;
+        }
+        if (controller.halyk.isSelected() && BigDecimal.ZERO.compareTo(halyk) >= 0) {
+          halyk = remain;
+        }
+        if (controller.duty.isSelected() && BigDecimal.ZERO.compareTo(duty) >= 0) {
+          duty = remain;
+        }
+
+        paidAmount.setText(cash + TENGE_SUFFIX);
+        kaspiAmount.setText(kaspi + TENGE_SUFFIX);
+        halykAmount.setText(halyk + TENGE_SUFFIX);
+        dutyAmount.setText(duty + TENGE_SUFFIX);
+
+        paidRegister(PaymentType.COMBINED, cash, kaspi, halyk, duty);
+        rootStackPane.getChildren().remove(root);
+        UiControllerUtil.removeOpacityRectangle(rootStackPane);
+      });
+
+      controller.cancelButton.setOnAction(event -> {
+        rootStackPane.getChildren().remove(root);
+        UiControllerUtil.removeOpacityRectangle(rootStackPane);
+      });
+
+      UiControllerUtil.addOpacityRectangle(rootStackPane);
+      rootStackPane.getChildren().add(root);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 
   public void keyPressed(KeyEvent event) {
@@ -391,12 +465,34 @@ public class SellOperationController implements Initializable {
   }
 
   public void paidRegister(PaymentType paymentType) {
+    switch (paymentType) {
+      case CASH:
+        paidRegister(paymentType, totalSumBD, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO);
+        break;
+      case DUTY:
+        paidRegister(paymentType, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, totalSumBD);
+        break;
+      case KASPI:
+        paidRegister(paymentType, BigDecimal.ZERO, totalSumBD, BigDecimal.ZERO, BigDecimal.ZERO);
+        break;
+      case HALYK:
+        paidRegister(paymentType, BigDecimal.ZERO, BigDecimal.ZERO, totalSumBD, BigDecimal.ZERO);
+        break;
+    }
+  }
+  public void paidRegister(PaymentType paymentType,
+                           BigDecimal cash, BigDecimal kaspi,
+                           BigDecimal halyk, BigDecimal duty) {
     if (itemTable.getItems().size() <= 0) return;
 
     var sale = new Sale();
     sale.setSaleTime(LocalDateTime.now());
     sale.setAmount(totalSumBD);
     sale.setPaymentType(paymentType);
+    sale.setCashAmount(cash);
+    sale.setKaspiAmount(kaspi);
+    sale.setHalykAmount(halyk);
+    sale.setDutyAmount(duty);
     sale = saleRepository.save(sale);
 
     var saveList = new ArrayList<SaleItem>();
@@ -487,5 +583,8 @@ public class SellOperationController implements Initializable {
 
     returnAmount.setText(0 + TENGE_SUFFIX);
     paidAmount.setText(0 + TENGE_SUFFIX);
+    kaspiAmount.setText(0 + TENGE_SUFFIX);
+    halykAmount.setText(0 + TENGE_SUFFIX);
+    dutyAmount.setText(0 + TENGE_SUFFIX);
   }
 }

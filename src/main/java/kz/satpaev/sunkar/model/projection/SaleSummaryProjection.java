@@ -8,4 +8,8 @@ public interface SaleSummaryProjection {
   PaymentType getPaymentType();
   BigDecimal getTotalAmount();
   Integer getTotalCount();
+  BigDecimal getKaspiAmount();
+  BigDecimal getCashAmount();
+  BigDecimal getHalykAmount();
+  BigDecimal getDutyAmount();
 }

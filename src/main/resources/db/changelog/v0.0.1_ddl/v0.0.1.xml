@@ -95,4 +95,12 @@
         </createTable>
         <createSequence sequenceName="sub_item_seq" incrementBy="1" cacheSize="50"/>
     </changeSet>
+    <changeSet author="seiit" id="modify sale 002">
+        <addColumn tableName="sale">
+            <column name="cash_amount" type="numeric"/>
+            <column name="kaspi_amount" type="numeric"/>
+            <column name="halyk_amount" type="numeric"/>
+            <column name="duty_amount" type="numeric"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

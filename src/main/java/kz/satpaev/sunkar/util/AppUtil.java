@@ -1,8 +1,11 @@
 package kz.satpaev.sunkar.util;
 
+import kz.satpaev.sunkar.model.entity.PaymentType;
+import kz.satpaev.sunkar.model.projection.SaleSummaryProjection;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.ByteArrayOutputStream;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HexFormat;
 
@@ -110,5 +113,44 @@ public class AppUtil {
     private static String fillZero(long seq) {
         int count = (seq + "").length();
       return "0".repeat(Math.max(0, 7 - count)) + seq;
+    }
+
+    private static SaleSummaryProjection defaultSaleSummaryProjection(PaymentType paymentType) {
+        return new SaleSummaryProjection() {
+            @Override
+            public PaymentType getPaymentType() {
+                return paymentType;
+            }
+
+            @Override
+            public BigDecimal getTotalAmount() {
+                return BigDecimal.ZERO;
+            }
+
+            @Override
+            public Integer getTotalCount() {
+                return 0;
+            }
+
+            @Override
+            public BigDecimal getKaspiAmount() {
+                return BigDecimal.ZERO;
+            }
+
+            @Override
+            public BigDecimal getCashAmount() {
+                return BigDecimal.ZERO;
+            }
+
+            @Override
+            public BigDecimal getHalykAmount() {
+                return BigDecimal.ZERO;
+            }
+
+            @Override
+            public BigDecimal getDutyAmount() {
+                return BigDecimal.ZERO;
+            }
+        };
     }
 }

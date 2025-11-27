@@ -45,21 +45,25 @@
             <VBox spacing="4" styleClass="card" GridPane.rowIndex="0" GridPane.columnIndex="2" maxWidth="Infinity" maxHeight="Infinity" >
                 <Label text="Наличные платежи" styleClass="card-title"/>
                 <Label fx:id="cash" text="0.0 тг." styleClass="card-value"/>
+                <Label fx:id="cashAmountNote" styleClass="card-note"/>
             </VBox>
 
             <VBox spacing="4" styleClass="card" GridPane.rowIndex="0" GridPane.columnIndex="3" maxWidth="Infinity" maxHeight="Infinity" >
                 <Label text="Kaspi" styleClass="card-title"/>
                 <Label fx:id="kaspi" text="0.0 тг." styleClass="card-value"/>
+                <Label fx:id="kaspiAmountNote" styleClass="card-note"/>
             </VBox>
 
             <VBox spacing="4" styleClass="card" GridPane.rowIndex="0" GridPane.columnIndex="4" maxWidth="Infinity" maxHeight="Infinity" >
                 <Label text="Halyk" styleClass="card-title"/>
                 <Label fx:id="halyk" text="0.0 тг." styleClass="card-value"/>
+                <Label fx:id="halykAmountNote" styleClass="card-note"/>
             </VBox>
 
             <VBox spacing="4" styleClass="card" GridPane.rowIndex="0" GridPane.columnIndex="5" maxWidth="Infinity" maxHeight="Infinity" >
                 <Label text="Долг" styleClass="card-title"/>
                 <Label fx:id="duty" text="0.0 тг." styleClass="card-value"/>
+                <Label fx:id="dutyAmountNote" styleClass="card-note"/>
             </VBox>
         </GridPane>
         </VBox>
@@ -71,9 +75,12 @@
             </padding>
             <TableView fx:id="salesTable" VBox.vgrow="ALWAYS">
                 <columns>
-                    <TableColumn fx:id="id" text="ИД" style="-fx-alignment: CENTER_LEFT"/>
                     <TableColumn fx:id="saleTime" text="Время продажи"  style="-fx-alignment: CENTER_LEFT"/>
                     <TableColumn fx:id="saleAmount" text="Сумма продажи"  style="-fx-alignment: CENTER_RIGHT"/>
+                    <TableColumn fx:id="cashAmount" text="Наличными"  style="-fx-alignment: CENTER_RIGHT"/>
+                    <TableColumn fx:id="kaspiAmount" text="Kaspi"  style="-fx-alignment: CENTER_RIGHT"/>
+                    <TableColumn fx:id="halykAmount" text="Halyk"  style="-fx-alignment: CENTER_RIGHT"/>
+                    <TableColumn fx:id="dutyAmount" text="Долг"  style="-fx-alignment: CENTER_RIGHT"/>
                     <TableColumn fx:id="paymentType" text="Тип оплаты" style="-fx-alignment: CENTER_RIGHT"/>
                     <TableColumn fx:id="operation" text="Операции" style="-fx-alignment: CENTER"/>
                 </columns>

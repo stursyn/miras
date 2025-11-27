@@ -30,8 +30,7 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.function.Supplier;
 
-import static kz.satpaev.sunkar.util.Constants.TENGE_SUFFIX;
-import static kz.satpaev.sunkar.util.Constants.ruDateTimeFormatter;
+import static kz.satpaev.sunkar.util.Constants.*;
 
 @Component
 public class SalesController implements Initializable {
@@ -47,11 +46,17 @@ public class SalesController implements Initializable {
   @FXML
   private TableView<SaleDto> salesTable;
   @FXML
-  public TableColumn<SaleDto, Long> id;
-  @FXML
   public TableColumn<SaleDto, String> saleTime;
   @FXML
   public TableColumn<SaleDto, Double> saleAmount;
+  @FXML
+  public TableColumn<SaleDto, Double> cashAmount;
+  @FXML
+  public TableColumn<SaleDto, Double> kaspiAmount;
+  @FXML
+  public TableColumn<SaleDto, Double> halykAmount;
+  @FXML
+  public TableColumn<SaleDto, Double> dutyAmount;
   @FXML
   public TableColumn<SaleDto, String> paymentType;
   @FXML
@@ -69,25 +74,39 @@ public class SalesController implements Initializable {
   @FXML
   public Label cash;
   @FXML
+  public Label cashAmountNote;
+  @FXML
   public Label kaspi;
+  @FXML
+  public Label kaspiAmountNote;
   @FXML
   public Label halyk;
   @FXML
+  public Label halykAmountNote;
+  @FXML
   public Label duty;
+  @FXML
+  public Label dutyAmountNote;
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
-    id.setCellValueFactory(new PropertyValueFactory<>("id"));
     saleTime.setCellValueFactory(new PropertyValueFactory<>("SaleTime"));
     saleAmount.setCellValueFactory(new PropertyValueFactory<>("SaleAmount"));
+    cashAmount.setCellValueFactory(new PropertyValueFactory<>("CashAmount"));
+    kaspiAmount.setCellValueFactory(new PropertyValueFactory<>("KaspiAmount"));
+    halykAmount.setCellValueFactory(new PropertyValueFactory<>("HalykAmount"));
+    dutyAmount.setCellValueFactory(new PropertyValueFactory<>("DutyAmount"));
     paymentType.setCellValueFactory(new PropertyValueFactory<>("PaymentType"));
 
     operation.setCellFactory(new ShowSaleDetailButtonCallback(() -> rootStackPane.get(), () -> null, saleRepository));
 
-    id.prefWidthProperty().bind(salesTable.widthProperty().multiply(0.1));
-    saleTime.prefWidthProperty().bind(salesTable.widthProperty().multiply(0.4));
+    saleTime.prefWidthProperty().bind(salesTable.widthProperty().multiply(0.2));
     saleAmount.prefWidthProperty().bind(salesTable.widthProperty().multiply(0.2));
-    paymentType.prefWidthProperty().bind(salesTable.widthProperty().multiply(0.2));
+    cashAmount.prefWidthProperty().bind(salesTable.widthProperty().multiply(0.1));
+    kaspiAmount.prefWidthProperty().bind(salesTable.widthProperty().multiply(0.1));
+    halykAmount.prefWidthProperty().bind(salesTable.widthProperty().multiply(0.1));
+    dutyAmount.prefWidthProperty().bind(salesTable.widthProperty().multiply(0.1));
+    paymentType.prefWidthProperty().bind(salesTable.widthProperty().multiply(0.1));
     operation.prefWidthProperty().bind(salesTable.widthProperty().multiply(0.1));
   }
 
@@ -105,18 +124,41 @@ public class SalesController implements Initializable {
     if (count > 0) {
       avgReceipt.setText(String.format("%.1f", amount.divide(BigDecimal.valueOf(count), 2, RoundingMode.HALF_UP)) + Constants.TENGE_SUFFIX);
     }
+    var combinedSale = saleSummary.stream()
+        .filter(sale -> sale.getPaymentType() == PaymentType.COMBINED)
+        .findFirst().orElse(defaultSaleSummaryProjection(PaymentType.COMBINED));
     for (SaleSummaryProjection saleSummaryProjection : saleSummary) {
       if (saleSummaryProjection.getPaymentType() == PaymentType.CASH) {
-        cash.setText(String.format("%.1f", saleSummaryProjection.getTotalAmount()) + Constants.TENGE_SUFFIX);
+        cash.setText(String.format("%.1f", saleSummaryProjection.getCashAmount().add(combinedSale.getCashAmount())) + Constants.TENGE_SUFFIX);
+        Integer totalCount = saleSummaryProjection.getTotalCount();
+        if (BigDecimal.ZERO.compareTo(combinedSale.getCashAmount()) < 0) {
+          totalCount = totalCount + combinedSale.getTotalCount();
+        }
+        cashAmountNote.setText(String.format("в рамках %d транзакции", totalCount));
       }
       if (saleSummaryProjection.getPaymentType() == PaymentType.KASPI) {
-        kaspi.setText(String.format("%.1f", saleSummaryProjection.getTotalAmount()) + Constants.TENGE_SUFFIX);
+        kaspi.setText(String.format("%.1f",  saleSummaryProjection.getKaspiAmount().add(combinedSale.getKaspiAmount())) + Constants.TENGE_SUFFIX);
+        Integer totalCount = saleSummaryProjection.getTotalCount();
+        if (BigDecimal.ZERO.compareTo(combinedSale.getKaspiAmount()) < 0) {
+          totalCount = totalCount + combinedSale.getTotalCount();
+        }
+        kaspiAmountNote.setText(String.format("в рамках %d транзакции", totalCount));
       }
       if (saleSummaryProjection.getPaymentType() == PaymentType.HALYK) {
-        halyk.setText(String.format("%.1f", saleSummaryProjection.getTotalAmount()) + Constants.TENGE_SUFFIX);
+        halyk.setText(String.format("%.1f",  saleSummaryProjection.getHalykAmount().add(combinedSale.getHalykAmount())) + Constants.TENGE_SUFFIX);
+        Integer totalCount = saleSummaryProjection.getTotalCount();
+        if (BigDecimal.ZERO.compareTo(combinedSale.getHalykAmount()) < 0) {
+          totalCount = totalCount + combinedSale.getTotalCount();
+        }
+        halykAmountNote.setText(String.format("в рамках %d транзакции", totalCount));
       }
       if (saleSummaryProjection.getPaymentType() == PaymentType.DUTY) {
-        duty.setText(String.format("%.1f", saleSummaryProjection.getTotalAmount()) + Constants.TENGE_SUFFIX);
+        duty.setText(String.format("%.1f",  saleSummaryProjection.getDutyAmount().add(combinedSale.getDutyAmount())) + Constants.TENGE_SUFFIX);
+        Integer totalCount = saleSummaryProjection.getTotalCount();
+        if (BigDecimal.ZERO.compareTo(combinedSale.getDutyAmount()) < 0) {
+          totalCount = totalCount + combinedSale.getTotalCount();
+        }
+        dutyAmountNote.setText(String.format("в рамках %d транзакции", totalCount));
       }
     }
 
@@ -143,6 +185,10 @@ public class SalesController implements Initializable {
                   saleDto.setSaleTime(item.getSaleTime());
                   saleDto.setPaymentType(item.getPaymentType());
                   saleDto.setSaleAmount(item.getAmount());
+                  saleDto.setCashAmount(item.getCashAmount());
+                  saleDto.setKaspiAmount(item.getKaspiAmount());
+                  saleDto.setHalykAmount(item.getHalykAmount());
+                  saleDto.setDutyAmount(item.getDutyAmount());
                   return saleDto;
                 })
                 .toList()

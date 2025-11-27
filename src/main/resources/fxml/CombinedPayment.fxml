@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="kz.satpaev.sunkar.controllers.CombinedPaymentController"
+            stylesheets="@../css/fullpackstyling.css"
+            maxWidth="500" maxHeight="400">
+    <top>
+        <HBox alignment="CENTER_RIGHT"
+              spacing="10"
+              styleClass="cancel-button-h-box">
+
+            <Label text="Оплата" styleClass="add-label"/>
+            <Region HBox.hgrow="ALWAYS" /> <!-- пустое пространство слева -->
+
+            <!-- Кнопка закрыть -->
+            <Button fx:id="cancelButton" text="✕" styleClass="cancel-button-btn" />
+        </HBox>
+    </top>
+    <center>
+        <GridPane styleClass="add-grid"
+                  hgap="10" vgap="10" >
+            <padding>
+                <Insets top="10" right="10" left="10" bottom="10"/>
+            </padding>
+
+            <Label text="Наличными:" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="add-label"/>
+            <TextField fx:id="cashAmount" GridPane.rowIndex="0" GridPane.columnIndex="1" GridPane.columnSpan="2"
+                       GridPane.hgrow="ALWAYS" maxWidth="Infinity" />
+
+            <CheckBox text="Kaspi" fx:id="kaspi" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+            <TextField fx:id="kaspiAmount" GridPane.rowIndex="1" GridPane.columnIndex="2" visible="false"
+                       GridPane.hgrow="ALWAYS" maxWidth="Infinity" />
+
+            <CheckBox text="Halyk" fx:id="halyk" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+            <TextField fx:id="halykAmount" GridPane.rowIndex="2" GridPane.columnIndex="2" visible="false"
+                       GridPane.hgrow="ALWAYS" maxWidth="Infinity" />
+
+            <CheckBox text="Долг" fx:id="duty" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+            <TextField fx:id="dutyAmount" GridPane.rowIndex="3" GridPane.columnIndex="2" visible="false"
+                       GridPane.hgrow="ALWAYS" maxWidth="Infinity" />
+
+            <Button fx:id="submitButton" text="Оплачено" styleClass="add-button"  GridPane.columnSpan="2" disable="true"
+                    GridPane.rowIndex="4" GridPane.columnIndex="1" maxWidth="Infinity" />
+        </GridPane>
+    </center>
+    <bottom>
+        <VBox fx:id="keyboard"/>
+    </bottom>
+</BorderPane>
