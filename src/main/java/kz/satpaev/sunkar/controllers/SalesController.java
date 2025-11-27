@@ -27,9 +27,11 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 import static kz.satpaev.sunkar.util.Constants.*;
 
@@ -148,6 +150,13 @@ public class SalesController implements Initializable {
     var combinedSale = saleSummary.stream()
         .filter(sale -> sale.getPaymentType() == PaymentType.COMBINED)
         .findFirst().orElse(defaultSaleSummaryProjection(PaymentType.COMBINED));
+
+    var collect = saleSummary.stream().collect(Collectors.groupingBy(SaleSummaryProjection::getPaymentType));
+    if (collect.get(PaymentType.CASH) == null) saleSummary.add(defaultSaleSummaryProjection(PaymentType.CASH));
+    if (collect.get(PaymentType.KASPI) == null) saleSummary.add(defaultSaleSummaryProjection(PaymentType.KASPI));
+    if (collect.get(PaymentType.HALYK) == null) saleSummary.add(defaultSaleSummaryProjection(PaymentType.HALYK));
+    if (collect.get(PaymentType.DUTY) == null) saleSummary.add(defaultSaleSummaryProjection(PaymentType.DUTY));
+
     for (SaleSummaryProjection saleSummaryProjection : saleSummary) {
       if (saleSummaryProjection.getPaymentType() == PaymentType.CASH) {
         cash.setText(String.format("%.1f", saleSummaryProjection.getCashAmount().add(combinedSale.getCashAmount())) + Constants.TENGE_SUFFIX);

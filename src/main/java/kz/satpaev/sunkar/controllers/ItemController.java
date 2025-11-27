@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Component;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.function.UnaryOperator;
 
 import static kz.satpaev.sunkar.util.Constants.KEYBOARD_VIEW;
 
@@ -59,6 +61,18 @@ public class ItemController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         barcode.setOnKeyPressed(this::keyPressed);
+        // Ограничение только цифрами
+        UnaryOperator<TextFormatter.Change> filter = change -> {
+            String text = change.getText();
+            if (text.matches("[0-9]*")) { // только цифры
+                return change;
+            }
+            return null;
+        };
+
+        sellPrice.setTextFormatter(new TextFormatter<>(filter));
+        quantity.setTextFormatter(new TextFormatter<>(filter));
+
         keyboard.getChildren().add(KEYBOARD_VIEW);
     }
 

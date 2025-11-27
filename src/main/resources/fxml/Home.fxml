@@ -94,8 +94,8 @@
                <ColumnConstraints prefWidth="200" halignment="CENTER"/>
                <ColumnConstraints prefWidth="200" halignment="CENTER"/>
                <ColumnConstraints prefWidth="200" halignment="CENTER"/>
-               <ColumnConstraints prefWidth="100" halignment="CENTER"/>
-               <ColumnConstraints prefWidth="100" halignment="CENTER"/>
+               <ColumnConstraints prefWidth="150" halignment="CENTER"/>
+               <ColumnConstraints prefWidth="150" halignment="CENTER"/>
             </columnConstraints>
 
             <rowConstraints>
