@@ -41,14 +41,14 @@ public class SaleDateilOperationButtonCallback implements Callback<TableColumn<S
 
           final HBox pane = new HBox();
 
-          searchView.setFitHeight(20);
+          searchView.setFitHeight(40);
           searchView.setPreserveRatio(true);
           searchButton.setOnAction(event -> {
             SaleDto saleDto = getTableView().getItems().get(getIndex());
             supplier.get();
           }
           );
-          searchButton.setPrefSize(50,50);
+          searchButton.setPrefSize(40,40);
           searchButton.setGraphic(searchView);
 
           pane.getChildren().addAll(searchButton);

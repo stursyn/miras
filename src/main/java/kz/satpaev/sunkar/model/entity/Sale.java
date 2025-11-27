@@ -22,4 +22,6 @@ public class Sale {
     private BigDecimal halykAmount;
     private BigDecimal dutyAmount;
     private LocalDateTime saleTime;
+    @Column(nullable = false)
+    private Boolean deleted = Boolean.FALSE;
 }

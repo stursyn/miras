@@ -1,5 +1,6 @@
 package kz.satpaev.sunkar.controllers;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -98,7 +99,14 @@ public class SalesController implements Initializable {
     dutyAmount.setCellValueFactory(new PropertyValueFactory<>("DutyAmount"));
     paymentType.setCellValueFactory(new PropertyValueFactory<>("PaymentType"));
 
-    operation.setCellFactory(new ShowSaleDetailButtonCallback(() -> rootStackPane.get(), () -> null, saleRepository));
+    operation.setCellFactory(new ShowSaleDetailButtonCallback(() -> rootStackPane.get(), () -> {
+      Platform.runLater(()-> {
+        int currentPageIndex = pagination.getCurrentPageIndex();
+        loadSales(workingDate);
+        pagination.setCurrentPageIndex(currentPageIndex);
+      });
+      return null;
+    }, saleRepository));
 
     saleTime.prefWidthProperty().bind(salesTable.widthProperty().multiply(0.2));
     saleAmount.prefWidthProperty().bind(salesTable.widthProperty().multiply(0.2));
@@ -108,6 +116,19 @@ public class SalesController implements Initializable {
     dutyAmount.prefWidthProperty().bind(salesTable.widthProperty().multiply(0.1));
     paymentType.prefWidthProperty().bind(salesTable.widthProperty().multiply(0.1));
     operation.prefWidthProperty().bind(salesTable.widthProperty().multiply(0.1));
+
+    salesTable.setRowFactory(tv -> new TableRow<>() {
+      @Override
+      protected void updateItem(SaleDto item, boolean empty) {
+        super.updateItem(item, empty);
+        // Сначала удаляем кастомный класс
+        getStyleClass().removeAll("special-row");
+
+        if (item!=null && Boolean.TRUE.equals(item.getDeleted())) {
+          getStyleClass().add("red-background");
+        }
+      }
+    });
   }
 
   public void loadSales(LocalDate date) {
@@ -189,6 +210,7 @@ public class SalesController implements Initializable {
                   saleDto.setKaspiAmount(item.getKaspiAmount());
                   saleDto.setHalykAmount(item.getHalykAmount());
                   saleDto.setDutyAmount(item.getDutyAmount());
+                  saleDto.setDeleted(item.getDeleted());
                   return saleDto;
                 })
                 .toList()

@@ -38,97 +38,104 @@ public class ItemRemoveButtonCallback implements Callback<TableColumn<ItemDto, S
         if (empty) {
           setGraphic(null);
         } else {
-
-          final Image count = new Image("icons/inventory.png");
-          final ImageView countView = new ImageView(count);
-          final Button countBtn = new Button();
-          countBtn.getStyleClass().add("option-key");
-
-          final Image decrease = new Image("icons/minus.png");
-          final ImageView decreaseView = new ImageView(decrease);
-          final Button decreaseBtn = new Button();
-          decreaseBtn.getStyleClass().add("option-key");
-
-          final Image edit = new Image("icons/edit.png");
-          final ImageView editView = new ImageView(edit);
-          final Button editBtn = new Button();
-          editBtn.getStyleClass().add("option-key");
-
           final HBox pane = new HBox();
+          pane.getChildren().addAll(getEditBtn(), getDecreaseBtn(), getCountButton());
+          pane.setSpacing(5);
 
-          decreaseView.setFitHeight(20);
-          decreaseView.setPreserveRatio(true);
-          decreaseBtn.setOnAction(event -> {
-            var object = getTableView().getItems().get(getIndex());
-            object.setCount((object.getCount() - 1));
-            if (object.getCount() == 0) {
-              getTableView().getItems().remove(getIndex());
-            }
-            object.setTotalPrice(object.getCount() * object.getPrice());
+          setGraphic(pane);
+        }
+          setText(null);
+      }
+
+      private Button getEditBtn() {
+        final Image edit = new Image("icons/edit.png");
+        final ImageView editView = new ImageView(edit);
+        final Button editBtn = new Button();
+        editBtn.getStyleClass().add("option-key");
+
+        editView.setFitHeight(40);
+        editView.setPreserveRatio(true);
+        editBtn.setOnAction(event -> {
+          ItemDto itemDto = getTableView().getItems().get(getIndex());
+          Item itemByBarcode = itemRepository.findItemByBarcode(itemDto.getBarcode());
+          new AbstractController().dbAddNewItem(itemByBarcode, rootStackPane, saveItem -> {
+            Item updatedItem = itemRepository.findItemByBarcode(itemDto.getBarcode());
+
+            itemDto.setPrice(updatedItem.getSellPrice().doubleValue());
+            itemDto.setTotalPrice(itemDto.getCount() * itemDto.getPrice());
+            itemDto.setItemName(updatedItem.getName());
 
             getTableView().refresh();
 
             supplier.get();
           });
 
-          decreaseBtn.setPrefSize(20,20);
-          decreaseBtn.setGraphic(decreaseView);
+        });
+        editBtn.setPrefSize(40,40);
+        editBtn.setGraphic(editView);
+        return editBtn;
+      }
 
-          countView.setFitHeight(20);
-          countView.setPreserveRatio(true);
-          countBtn.setOnAction(event -> {
-            ItemDto itemDto = getTableView().getItems().get(getIndex());
-            new AbstractController().makeCountOfObject(rootStackPane, itemCount -> {
-              if (itemCount == null) {
-                supplier.get();
-                return;
-              }
-              Platform.runLater(() -> {
-                itemDto.setCount(itemCount);
+      private Button getDecreaseBtn() {
+        final Image decrease = new Image("icons/minus.png");
+        final ImageView decreaseView = new ImageView(decrease);
+        final Button decreaseBtn = new Button();
+        decreaseBtn.getStyleClass().add("option-key");
 
-                if (itemDto.getCount() == 0) {
-                  getTableView().getItems().remove(getIndex());
-                }
-                itemDto.setTotalPrice(itemDto.getCount() * itemDto.getPrice());
-
-                getTableView().refresh();
-
-                supplier.get();
-              });
-            });
-            supplier.get();
+        decreaseView.setFitHeight(40);
+        decreaseView.setPreserveRatio(true);
+        decreaseBtn.setOnAction(event -> {
+          var object = getTableView().getItems().get(getIndex());
+          object.setCount((object.getCount() - 1));
+          if (object.getCount() == 0) {
+            getTableView().getItems().remove(getIndex());
           }
-          );
-          countBtn.setPrefSize(20,20);
-          countBtn.setGraphic(countView);
+          object.setTotalPrice(object.getCount() * object.getPrice());
 
-          editView.setFitHeight(20);
-          editView.setPreserveRatio(true);
-          editBtn.setOnAction(event -> {
-            ItemDto itemDto = getTableView().getItems().get(getIndex());
-            Item itemByBarcode = itemRepository.findItemByBarcode(itemDto.getBarcode());
-            new AbstractController().dbAddNewItem(itemByBarcode, rootStackPane, saveItem -> {
-              Item updatedItem = itemRepository.findItemByBarcode(itemDto.getBarcode());
+          getTableView().refresh();
 
-              itemDto.setPrice(updatedItem.getSellPrice().doubleValue());
+          supplier.get();
+        });
+
+        decreaseBtn.setPrefSize(40,40);
+        decreaseBtn.setGraphic(decreaseView);
+        return decreaseBtn;
+      }
+
+      private Button getCountButton() {
+        final Image count = new Image("icons/inventory.png");
+        final ImageView countView = new ImageView(count);
+        final Button countBtn = new Button();
+        countBtn.getStyleClass().add("option-key");
+
+        countView.setFitHeight(40);
+        countView.setPreserveRatio(true);
+        countBtn.setOnAction(event -> {
+          ItemDto itemDto = getTableView().getItems().get(getIndex());
+          new AbstractController().makeCountOfObject(rootStackPane, itemCount -> {
+            if (itemCount == null) {
+              supplier.get();
+              return;
+            }
+            Platform.runLater(() -> {
+              itemDto.setCount(itemCount);
+
+              if (itemDto.getCount() == 0) {
+                getTableView().getItems().remove(getIndex());
+              }
               itemDto.setTotalPrice(itemDto.getCount() * itemDto.getPrice());
-              itemDto.setItemName(updatedItem.getName());
 
               getTableView().refresh();
 
               supplier.get();
             });
-
           });
-          editBtn.setPrefSize(20,20);
-          editBtn.setGraphic(editView);
-
-          pane.getChildren().addAll(editBtn, decreaseBtn, countBtn);
-          pane.setSpacing(5);
-
-          setGraphic(pane);
+          supplier.get();
         }
-          setText(null);
+        );
+        countBtn.setPrefSize(40,40);
+        countBtn.setGraphic(countView);
+        return countBtn;
       }
     };
   }

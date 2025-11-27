@@ -101,10 +101,10 @@
 
 .option-key {
     -fx-font-size: 16px;
-    -fx-padding: 10 12;
+    -fx-padding: 0;
     -fx-background-radius: 10;
     -fx-border-radius: 10;
-    -fx-background-color: #b3cdfa;
+    -fx-background-color: transparent;
     -fx-border-color: rgba(0,0,0,0.06);
     -fx-cursor: hand;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 4, 0.1, 0, 2);
@@ -430,4 +430,8 @@
 /* Фокус — Material ripple imitation */
 .check-box:focused .box {
     -fx-effect: dropshadow(gaussian, rgba(41,98,255,0.3), 7, 0, 0, 0);
+}
+
+.red-background {
+    -fx-background-color: #ff9393;
 }

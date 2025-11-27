@@ -1,5 +1,6 @@
 package kz.satpaev.sunkar.model.dto;
 
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -19,6 +20,7 @@ public class SaleDto {
   private SimpleDoubleProperty halykAmount = new SimpleDoubleProperty(0);
   private SimpleDoubleProperty dutyAmount = new SimpleDoubleProperty(0);
   private SimpleStringProperty paymentType = new SimpleStringProperty();
+  private SimpleBooleanProperty deleted = new SimpleBooleanProperty(false);
 
   public Long getId() {
     return id.get();
@@ -93,5 +95,14 @@ public class SaleDto {
   public void setPaymentType(PaymentType paymentType) {
     if (paymentType == null) return;
     this.paymentType = new SimpleStringProperty(paymentType.getValue());
+  }
+
+  public Boolean getDeleted() {
+    return deleted.get();
+  }
+
+  public void setDeleted(Boolean deleted) {
+    if (deleted == null) return;
+    this.deleted = new SimpleBooleanProperty(deleted);
   }
 }

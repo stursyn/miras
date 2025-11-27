@@ -11,7 +11,10 @@ import javafx.util.Callback;
 import kz.satpaev.sunkar.controllers.AbstractController;
 import kz.satpaev.sunkar.model.dto.SaleDto;
 import kz.satpaev.sunkar.repository.SaleRepository;
+import kz.satpaev.sunkar.util.Constants;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.function.Supplier;
 
 public class ShowSaleDetailButtonCallback implements Callback<TableColumn<SaleDto, String>, TableCell<SaleDto, String>> {
@@ -24,6 +27,7 @@ public class ShowSaleDetailButtonCallback implements Callback<TableColumn<SaleDt
     this.supplier = supplier;
     this.saleRepository = saleRepository;
   }
+
   @Override
   public TableCell call(final TableColumn<SaleDto, String> param) {
     return new TableCell<SaleDto, String>() {
@@ -33,33 +37,61 @@ public class ShowSaleDetailButtonCallback implements Callback<TableColumn<SaleDt
         if (empty) {
           setGraphic(null);
         } else {
-
-          final Image search = new Image("icons/search.png");
-          final ImageView searchView = new ImageView(search);
-          final Button searchButton = new Button();
-          searchButton.getStyleClass().add("option-key");
+          SaleDto saleDto = getTableView().getItems().get(getIndex());
 
           final HBox pane = new HBox();
-
-          searchView.setFitHeight(20);
-          searchView.setPreserveRatio(true);
-          searchButton.setOnAction(event -> {
-            SaleDto saleDto = getTableView().getItems().get(getIndex());
-            new AbstractController().showSaleDetail(rootStackPane.get(), saleDto, sale -> {
-              supplier.get();
-            });
-            supplier.get();
+          pane.getChildren().add(getSearchButton(saleDto));
+          if (!Boolean.TRUE.equals(saleDto.getDeleted()) &&
+              LocalDate.now().equals(LocalDateTime.parse(saleDto.getSaleTime(), Constants.formatter).toLocalDate())) {
+            pane.getChildren().add(getDeactivateButton(saleDto));
           }
-          );
-          searchButton.setPrefSize(20,20);
-          searchButton.setGraphic(searchView);
-
-          pane.getChildren().addAll(searchButton);
           pane.setSpacing(5);
 
           setGraphic(pane);
         }
           setText(null);
+      }
+
+      private Button getSearchButton(SaleDto saleDto) {
+        final Image search = new Image("icons/search.png");
+        final ImageView searchView = new ImageView(search);
+        final Button searchButton = new Button();
+        searchButton.getStyleClass().add("option-key");
+
+        searchView.setFitHeight(40);
+        searchView.setPreserveRatio(true);
+        searchButton.setOnAction(event -> {
+          new AbstractController().showSaleDetail(rootStackPane.get(), saleDto, sale -> {
+            supplier.get();
+          });
+          supplier.get();
+        }
+        );
+        searchButton.setPrefSize(40,40);
+        searchButton.setGraphic(searchView);
+        return searchButton;
+      }
+
+      private Button getDeactivateButton(SaleDto saleDto) {
+        final Image img = new Image("icons/deactivate.png");
+        final ImageView imgView = new ImageView(img);
+        final Button button = new Button();
+        button.getStyleClass().add("option-key");
+
+        imgView.setFitHeight(40);
+        imgView.setPreserveRatio(true);
+        button.setOnAction(event -> {
+              saleRepository.findById(saleDto.getId())
+                  .ifPresent(sale -> {
+                    sale.setDeleted(Boolean.TRUE);
+                    saleRepository.save(sale);
+                  });
+              supplier.get();
+            }
+        );
+        button.setPrefSize(40,40);
+        button.setGraphic(imgView);
+        return button;
       }
     };
   }

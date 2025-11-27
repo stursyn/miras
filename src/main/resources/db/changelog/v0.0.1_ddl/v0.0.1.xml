@@ -103,4 +103,9 @@
             <column name="duty_amount" type="numeric"/>
         </addColumn>
     </changeSet>
+    <changeSet author="seiit" id="modify sale 003">
+        <addColumn tableName="sale">
+            <column name="deleted" type="boolean" defaultValue="false" value="false"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

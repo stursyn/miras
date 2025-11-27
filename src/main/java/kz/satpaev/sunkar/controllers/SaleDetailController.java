@@ -80,7 +80,6 @@ public class SaleDetailController implements Initializable {
 
   public void loadTable() {
     List<SaleDetailProjection> saleDetails = saleItemRepository.findSaleDetailBySaleId(saleId.get());
-    System.out.println("saleDetails: " + saleDetails + "; saleId: " + saleId.get());
     saleItemTable.setItems(FXCollections.observableArrayList(
         saleDetails
             .stream()
