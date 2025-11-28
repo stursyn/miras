@@ -14,6 +14,8 @@
            fx:controller="kz.satpaev.sunkar.controllers.SellOperationController">
    <VBox maxWidth="Infinity" maxHeight="Infinity" VBox.vgrow="ALWAYS">
       <HBox alignment="CENTER_RIGHT" styleClass="menu-h-box">
+         <Label fx:id="digitalClock" styleClass="digital-clock-label"/>
+         <Label HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
          <MenuBar fx:id="menu" styleClass="menu-bar">
             <Menu text="Продукт" styleClass="menu-button">
                <MenuItem text="Добавить" onAction="#addNewProduct"/>

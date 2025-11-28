@@ -435,3 +435,9 @@
 .red-background {
     -fx-background-color: #ff9393;
 }
+
+.digital-clock-label {
+    -fx-padding: 0 0 0 10;
+    -fx-text-fill: white;
+    -fx-font-size: 18px;
+}

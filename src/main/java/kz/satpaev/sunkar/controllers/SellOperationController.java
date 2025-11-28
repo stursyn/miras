@@ -1,5 +1,7 @@
 package kz.satpaev.sunkar.controllers;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -14,6 +16,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import kz.satpaev.sunkar.callbacks.ItemRemoveButtonCallback;
 import kz.satpaev.sunkar.controllers.keyboardfx.KeyboardView;
 import kz.satpaev.sunkar.model.dto.ItemDto;
@@ -22,6 +25,7 @@ import kz.satpaev.sunkar.repository.ItemRepository;
 import kz.satpaev.sunkar.repository.SaleItemRepository;
 import kz.satpaev.sunkar.repository.SaleRepository;
 import kz.satpaev.sunkar.repository.SubItemRepository;
+import kz.satpaev.sunkar.util.Constants;
 import kz.satpaev.sunkar.util.UiControllerUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,6 +74,8 @@ public class SellOperationController implements Initializable {
   public TableColumn<ItemDto, Integer> totalPrice;
   @FXML
   public TableColumn<ItemDto, String> operation;
+  @FXML
+  private Label digitalClock;
   @FXML
   private Label totalSum;
   @FXML
@@ -137,6 +143,13 @@ public class SellOperationController implements Initializable {
     kaspiAmount.setText(0 + TENGE_SUFFIX);
     halykAmount.setText(0 + TENGE_SUFFIX);
     dutyAmount.setText(0 + TENGE_SUFFIX);
+
+    digitalClock.setText(LocalDateTime.now().format(formatter_without_seconds));
+    Timeline timeline = new Timeline(new KeyFrame(Duration.minutes(1), event -> {
+      digitalClock.setText(LocalDateTime.now().format(formatter_without_seconds));
+    }));
+    timeline.setCycleCount(Timeline.INDEFINITE); // Make it run indefinitely
+    timeline.play(); // Start the timeline
 
     KEYBOARD_VIEW.setMode(KeyboardView.Mode.STANDARD);
   }
