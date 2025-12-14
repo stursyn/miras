@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-<?import javafx.geometry.Insets?>
-
 <StackPane style="-fx-background-color: #fff;"
            xmlns="http://javafx.com/javafx/9.0.1"
            xmlns:fx="http://javafx.com/fxml/1"
@@ -16,7 +15,8 @@
       <HBox alignment="CENTER_RIGHT" styleClass="menu-h-box">
          <Label fx:id="digitalClock" styleClass="digital-clock-label"/>
          <Label HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
-         <MenuBar fx:id="menu" styleClass="menu-bar">
+         <Button text="Ожидающие покупки" styleClass="cus-menu-button" onAction="#holdSales"/>
+         <MenuBar styleClass="menu-bar">
             <Menu text="Продукт" styleClass="menu-button">
                <MenuItem text="Добавить" onAction="#addNewProduct"/>
                <MenuItem text="Добавить весовой" onAction="#addSubItem"/>
@@ -112,7 +112,9 @@
             <Button fx:id="cashButton" text="НАЛИЧНЫМИ" styleClass="white-button" GridPane.rowIndex="1" GridPane.columnIndex="2" maxWidth="Infinity" maxHeight="Infinity" />
             <Button fx:id="byCard" text="HALYK"  styleClass="white-button" GridPane.rowIndex="2" GridPane.columnIndex="2" maxWidth="Infinity"  maxHeight="Infinity"  />
 
-            <Button text="ОТМЕНА" styleClass="red-button " onAction="#clearAll" GridPane.rowIndex="0" GridPane.columnIndex="3" GridPane.columnSpan="2" maxWidth="Infinity" maxHeight="Infinity" />
+            <Button text="В ОЧЕРЕДЬ" styleClass="white-button" onAction="#toHold" GridPane.rowIndex="0" GridPane.columnIndex="3" maxWidth="Infinity" maxHeight="Infinity" />
+            <Button text="ОТМЕНА" styleClass="red-button " onAction="#clearAll" GridPane.rowIndex="0" GridPane.columnIndex="4" maxWidth="Infinity" maxHeight="Infinity" />
+
             <Button fx:id="duty" text="ДОЛГ" styleClass="white-button" GridPane.rowIndex="1" GridPane.columnIndex="3" maxWidth="Infinity"  maxHeight="Infinity" />
             <Button fx:id="combinedButton" text="CASH/  KASPI" styleClass="white-button" GridPane.rowIndex="1" GridPane.columnIndex="4" maxWidth="Infinity" maxHeight="Infinity" />
             <Button fx:id="qrKaspi" text="KASPI" styleClass="qr-kaspi-button" GridPane.rowIndex="2" GridPane.columnIndex="3" GridPane.columnSpan="2" maxWidth="Infinity"  maxHeight="Infinity" />

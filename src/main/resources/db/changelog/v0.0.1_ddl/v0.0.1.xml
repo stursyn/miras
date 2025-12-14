@@ -108,4 +108,25 @@
             <column name="deleted" type="boolean" defaultValue="false" value="false"/>
         </addColumn>
     </changeSet>
+    <changeSet author="seiit" id="create hold_sale and hold_sale item table">
+        <createTable tableName="hold_sale">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="amount" type="numeric"/>
+            <column name="sale_time" type="timestamp"/>
+        </createTable>
+        <createSequence sequenceName="hold_sale_seq" incrementBy="50" cacheSize="50"/>
+        <createTable tableName="hold_sale_item">
+            <column name="hold_sale_id" type="bigint">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="item_barcode" type="varchar(255)">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="quantity" type="int"/>
+            <column name="unit_price" type="numeric"/>
+            <column name="item_name" type="varchar(255)"/>
+        </createTable>
+    </changeSet>
 </databaseChangeLog>

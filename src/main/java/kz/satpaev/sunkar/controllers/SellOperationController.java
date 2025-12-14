@@ -21,12 +21,9 @@ import kz.satpaev.sunkar.callbacks.ItemRemoveButtonCallback;
 import kz.satpaev.sunkar.controllers.keyboardfx.KeyboardView;
 import kz.satpaev.sunkar.model.dto.ItemDto;
 import kz.satpaev.sunkar.model.entity.*;
-import kz.satpaev.sunkar.repository.ItemRepository;
-import kz.satpaev.sunkar.repository.SaleItemRepository;
-import kz.satpaev.sunkar.repository.SaleRepository;
-import kz.satpaev.sunkar.repository.SubItemRepository;
-import kz.satpaev.sunkar.util.Constants;
+import kz.satpaev.sunkar.repository.*;
 import kz.satpaev.sunkar.util.UiControllerUtil;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -55,6 +52,10 @@ public class SellOperationController implements Initializable {
   private SaleRepository saleRepository;
   @Autowired
   private SaleItemRepository sellItemRepository;
+  @Autowired
+  private HoldSaleRepository holdSaleRepository;
+  @Autowired
+  private HoldSaleItemRepository holdSaleItemRepository;
   @Autowired
   private SubItemRepository subItemRepository;
 
@@ -310,6 +311,38 @@ public class SellOperationController implements Initializable {
     dbAddNewItem(null, barcodeText -> countTotalSum());
   }
 
+  public void holdSales() {
+    try {
+      FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("fxml/HoldSales.fxml"));
+      loader.setControllerFactory(applicationContext::getBean);
+      Parent root = loader.load();
+      HoldSalesController controller = loader.getController();
+
+      controller.rootStackPane = () -> rootStackPane;
+      controller.saleCheckedConsumer = (tableItems) -> {
+        if (CollectionUtils.isNotEmpty(tableItems)) {
+          Platform.runLater(() -> {
+            clearAll();
+            itemTable.getItems().addAll(tableItems);
+            countTotalSum();
+          });
+        }
+
+        rootStackPane.getChildren().remove(root);
+        UiControllerUtil.removeOpacityRectangle(rootStackPane);
+      };
+
+      controller.cancelButton.setOnAction(event -> {
+        rootStackPane.getChildren().remove(root);
+        UiControllerUtil.removeOpacityRectangle(rootStackPane);
+      });
+
+      UiControllerUtil.addOpacityRectangle(rootStackPane);
+      rootStackPane.getChildren().add(root);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
   public void saleHistory(LocalDate date) {
     try {
       FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("fxml/Sales.fxml"));
@@ -578,6 +611,29 @@ public class SellOperationController implements Initializable {
     } catch (IOException e) {
       e.printStackTrace();
     }
+  }
+
+  public void toHold() {
+    if (itemTable.getItems().isEmpty()) return;
+
+    var sale = new HoldSale();
+    sale.setSaleTime(LocalDateTime.now());
+    sale.setAmount(totalSumBD);
+    sale = holdSaleRepository.save(sale);
+
+    var saveList = new ArrayList<HoldSaleItem>();
+    for (ItemDto item : itemTable.getItems()) {
+      var saleItem = new HoldSaleItem();
+      saleItem.setItemBarcode(item.getBarcode());
+      saleItem.setItemName(item.getItemName());
+      saleItem.setHoldSaleId(sale.getId());
+      saleItem.setQuantity(item.getCount());
+      saleItem.setUnitPrice(BigDecimal.valueOf(item.getPrice()));
+      saveList.add(saleItem);
+    }
+    holdSaleItemRepository.saveAll(saveList);
+
+    clearAll();
   }
 
   public void clearAll() {
