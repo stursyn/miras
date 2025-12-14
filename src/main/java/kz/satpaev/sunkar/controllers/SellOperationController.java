@@ -351,6 +351,7 @@ public class SellOperationController implements Initializable {
       SalesController controller = loader.getController();
 
       controller.rootStackPane = () -> rootStackPane;
+      controller.amount = BigDecimal.ZERO;
       controller.loadSales(date);
       controller.cancelButton.setOnAction(event -> {
         rootStackPane.getChildren().remove(root);
