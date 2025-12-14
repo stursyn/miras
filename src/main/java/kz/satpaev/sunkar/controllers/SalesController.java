@@ -2,6 +2,7 @@ package kz.satpaev.sunkar.controllers;
 
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -27,8 +28,6 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -40,6 +39,7 @@ public class SalesController implements Initializable {
   private static int PAGE_SIZE = 30;
   public Supplier<StackPane> rootStackPane = () -> null;
   public LocalDate workingDate = LocalDate.now();
+  public BigDecimal amount = BigDecimal.ZERO;
 
   @Autowired
   private SaleRepository saleRepository;
@@ -138,7 +138,7 @@ public class SalesController implements Initializable {
     title.setText("Продажи за " + ruDateTimeFormatter.format(date));
 
     List<SaleSummaryProjection> saleSummary = saleRepository.saleSummaryByPaymentType(date.atStartOfDay(),
-        date.atTime(LocalTime.MAX));
+        date.atTime(LocalTime.MAX), amount);
 
     BigDecimal amount = saleSummary.stream().map(SaleSummaryProjection::getTotalAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
     int count = saleSummary.stream().map(SaleSummaryProjection::getTotalCount).reduce(0, Integer::sum);
@@ -198,8 +198,8 @@ public class SalesController implements Initializable {
   }
 
   private Node loadPage(int pageIndex) {
-    Page<Sale> dbSales = saleRepository.findAllBySaleTimeBetween(workingDate.atStartOfDay(),
-        workingDate.atTime(LocalTime.MAX), PageRequest.of(
+    Page<Sale> dbSales = saleRepository.findAllBySaleTimeBetweenAndAmountGreaterThanEqual(workingDate.atStartOfDay(),
+        workingDate.atTime(LocalTime.MAX), amount, PageRequest.of(
             pageIndex, PAGE_SIZE,
             Sort.by("saleTime").descending()
         )
@@ -228,5 +228,13 @@ public class SalesController implements Initializable {
     );
 
     return salesTable;
+  }
+
+  public void showFilter() {
+    new AbstractController().showEnterNumberView(rootStackPane.get(),retAmount -> Platform.runLater(()-> {
+      this.amount = retAmount;
+      loadSales(workingDate);
+      pagination.setCurrentPageIndex(0);
+    }));
   }
 }

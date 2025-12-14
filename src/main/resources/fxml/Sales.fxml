@@ -65,6 +65,9 @@
                 <Label fx:id="duty" text="0.0 тг." styleClass="card-value"/>
                 <Label fx:id="dutyAmountNote" styleClass="card-note"/>
             </VBox>
+            <Button text="Сумма продажи выше" wrapText="true" onAction="#showFilter"
+                    styleClass="white-button, wrap-button" GridPane.rowIndex="1" GridPane.columnIndex="0"
+                    maxWidth="Infinity" maxHeight="Infinity" />
         </GridPane>
         </VBox>
     </top>

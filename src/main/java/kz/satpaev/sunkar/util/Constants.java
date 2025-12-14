@@ -1,11 +1,13 @@
 package kz.satpaev.sunkar.util;
 
+import javafx.scene.control.TextFormatter;
 import kz.satpaev.sunkar.controllers.keyboardfx.KeyboardView;
 import kz.satpaev.sunkar.model.entity.PaymentType;
 import kz.satpaev.sunkar.model.projection.SaleSummaryProjection;
 
 import java.math.BigDecimal;
 import java.time.format.DateTimeFormatter;
+import java.util.function.UnaryOperator;
 
 public class Constants {
   public static final String OPACITY_RECTANGLE_ID = "#CUSTOM_OPACITY_RECTANGLE_ID";
@@ -61,4 +63,12 @@ public class Constants {
       }
     };
   }
+
+  public static final UnaryOperator<TextFormatter.Change> NUMBER_ONLY_FILTER = change -> {
+    String text = change.getText();
+    if (text.matches("[0-9]*")) { // только цифры
+      return change;
+    }
+    return null;
+  };
 }

@@ -422,7 +422,8 @@ public class SellOperationController implements Initializable {
       loader.setControllerFactory(applicationContext::getBean);
       Parent root = loader.load();
       PaymentController controller = loader.getController();
-
+      controller.header.setText("Наличными");
+      controller.submitButton.setText("Оплачено");
       Platform.runLater(() -> controller.price.requestFocus());
 
       controller.submitButton.setOnAction(event -> {

@@ -15,7 +15,7 @@
               spacing="10"
               styleClass="cancel-button-h-box">
 
-            <Label text="Наличными" styleClass="add-label"/>
+            <Label fx:id="header" styleClass="add-label"/>
             <Region HBox.hgrow="ALWAYS" /> <!-- пустое пространство слева -->
 
             <!-- Кнопка закрыть -->
@@ -33,7 +33,7 @@
             <TextField fx:id="price" GridPane.rowIndex="0" GridPane.columnIndex="1"
                        GridPane.hgrow="ALWAYS" maxWidth="Infinity" />
 
-            <Button fx:id="submitButton" text="Оплачено" styleClass="add-button" GridPane.rowIndex="1" GridPane.columnIndex="1" maxWidth="Infinity" />
+            <Button fx:id="submitButton" styleClass="add-button" GridPane.rowIndex="1" GridPane.columnIndex="1" maxWidth="Infinity" />
         </GridPane>
     </center>
     <bottom>

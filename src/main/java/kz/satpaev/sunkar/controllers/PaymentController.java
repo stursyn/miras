@@ -3,6 +3,7 @@ package kz.satpaev.sunkar.controllers;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import org.springframework.stereotype.Component;
@@ -16,6 +17,8 @@ import static kz.satpaev.sunkar.util.Constants.KEYBOARD_VIEW_NUMERIC;
 public class PaymentController implements Initializable {
   @FXML
   private VBox keyboard;
+  @FXML
+  public Label header;
   @FXML
   public TextField price;
   @FXML

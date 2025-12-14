@@ -111,4 +111,42 @@ public class AbstractController {
       e.printStackTrace();
     }
   }
+
+  public void showEnterNumberView(StackPane rootStackPane, Consumer<BigDecimal> callback) {
+    try {
+      FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("fxml/Payment.fxml"));
+      loader.setControllerFactory(applicationContext::getBean);
+      Parent root = loader.load();
+      PaymentController controller = loader.getController();
+      controller.header.setText("Фильтр");
+      controller.submitButton.setText("Поиск");
+      Platform.runLater(() -> controller.price.requestFocus());
+
+      controller.submitButton.setOnAction(event -> {
+        String text = controller.price.getText();
+        BigDecimal ret = BigDecimal.ZERO;
+        if (StringUtils.isNotEmpty(text)) {
+          try {
+            ret = new BigDecimal(text);
+          } catch (Exception ex) {
+            ret = new BigDecimal(text);
+          }
+        }
+        callback.accept(ret);
+
+        rootStackPane.getChildren().remove(root);
+        UiControllerUtil.removeOpacityRectangle(rootStackPane);
+      });
+
+      controller.cancelButton.setOnAction(event -> {
+        rootStackPane.getChildren().remove(root);
+        UiControllerUtil.removeOpacityRectangle(rootStackPane);
+      });
+
+      UiControllerUtil.addOpacityRectangle(rootStackPane);
+      rootStackPane.getChildren().add(root);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
 }

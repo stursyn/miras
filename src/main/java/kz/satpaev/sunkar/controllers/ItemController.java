@@ -20,6 +20,7 @@ import java.util.ResourceBundle;
 import java.util.function.UnaryOperator;
 
 import static kz.satpaev.sunkar.util.Constants.KEYBOARD_VIEW;
+import static kz.satpaev.sunkar.util.Constants.NUMBER_ONLY_FILTER;
 
 @Component
 public class ItemController implements Initializable {
@@ -61,17 +62,9 @@ public class ItemController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         barcode.setOnKeyPressed(this::keyPressed);
-        // Ограничение только цифрами
-        UnaryOperator<TextFormatter.Change> filter = change -> {
-            String text = change.getText();
-            if (text.matches("[0-9]*")) { // только цифры
-                return change;
-            }
-            return null;
-        };
 
-        sellPrice.setTextFormatter(new TextFormatter<>(filter));
-        quantity.setTextFormatter(new TextFormatter<>(filter));
+        sellPrice.setTextFormatter(new TextFormatter<>(NUMBER_ONLY_FILTER));
+        quantity.setTextFormatter(new TextFormatter<>(NUMBER_ONLY_FILTER));
 
         keyboard.getChildren().add(KEYBOARD_VIEW);
     }
