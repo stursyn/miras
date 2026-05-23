@@ -256,7 +256,7 @@ public class SellOperationController implements Initializable {
           }
           displayItem.setCount(1);
           displayItem.setTotalPrice(displayItem.getCount() * displayItem.getPrice());
-          itemTable.getItems().add(displayItem);
+          itemTable.getItems().add(0, displayItem);
         }
       }
       countTotalSum();
@@ -277,7 +277,11 @@ public class SellOperationController implements Initializable {
         }
       }
 
-      if (foundItem == null) {
+      if (foundItem != null) {
+        itemTable.getItems().remove(foundItem);
+        itemTable.getItems().add(0, foundItem);
+        itemTable.refresh();
+      } else {
         if (itemTableAddNewItem(barCode) == null) {
           dbAddNewItem("Неизвестный товар", barcodeText -> {
             itemTableAddNewItem(barcodeText);
@@ -301,7 +305,7 @@ public class SellOperationController implements Initializable {
       }
       displayItem.setCount(1);
       displayItem.setTotalPrice(displayItem.getCount() * displayItem.getPrice());
-      itemTable.getItems().add(displayItem);
+      itemTable.getItems().add(0, displayItem);
     }
 
     return dbItem;
@@ -416,7 +420,7 @@ public class SellOperationController implements Initializable {
             newItem.setCount(1);
             newItem.setTotalPrice(price.doubleValue() * newItem.getCount());
             Platform.runLater(()->{
-              itemTable.getItems().add(newItem);
+              itemTable.getItems().add(0, newItem);
               itemTable.refresh();
               countTotalSum();
             });
