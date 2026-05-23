@@ -65,6 +65,11 @@
             </HBox>
             <VBox maxWidth="Infinity" maxHeight="Infinity" spacing="5" styleClass="other-label">
                <HBox maxWidth="Infinity" maxHeight="Infinity">
+                  <Label text="Скидка"/>
+                  <Label HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                  <Label fx:id="discountSum"/>
+               </HBox>
+               <HBox maxWidth="Infinity" maxHeight="Infinity">
                   <Label text="Наличными"/>
                   <Label HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
                   <Label fx:id="paidAmount"/>

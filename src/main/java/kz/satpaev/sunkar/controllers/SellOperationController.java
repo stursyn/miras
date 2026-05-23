@@ -90,6 +90,8 @@ public class SellOperationController implements Initializable {
   @FXML
   private Label dutyAmount;
   @FXML
+  private Label discountSum;
+  @FXML
   private Label returnAmount;
   @FXML
   private Button cashButton;
@@ -148,6 +150,7 @@ public class SellOperationController implements Initializable {
     kaspiAmount.setText(0 + TENGE_SUFFIX);
     halykAmount.setText(0 + TENGE_SUFFIX);
     dutyAmount.setText(0 + TENGE_SUFFIX);
+    discountSum.setText(0 + TENGE_SUFFIX);
 
     digitalClock.setText(LocalDateTime.now().format(formatter_without_seconds));
     Timeline timeline = new Timeline(new KeyFrame(Duration.minutes(1), event -> {
@@ -659,11 +662,14 @@ public class SellOperationController implements Initializable {
     sb.setLength(0);
 
     double total = 0;
+    double discountTotal = 0;
     for (ItemDto item : itemTable.getItems()) {
       total += item.getTotalPrice();
+      discountTotal += item.getCount() * item.getPrice() - item.getTotalPrice();
     }
     this.totalSumBD = BigDecimal.valueOf(total);
     totalSum.setText(this.totalSumBD + TENGE_SUFFIX);
+    discountSum.setText(BigDecimal.valueOf(discountTotal) + TENGE_SUFFIX);
 
     returnAmount.setText(0 + TENGE_SUFFIX);
     paidAmount.setText(0 + TENGE_SUFFIX);
