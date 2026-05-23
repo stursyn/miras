@@ -43,6 +43,7 @@
                <TableColumn fx:id="itemName" text="Наименование"  style="-fx-alignment: CENTER_LEFT"/>
                <TableColumn fx:id="price" text="Цена"  style="-fx-alignment: CENTER_RIGHT"/>
                <TableColumn fx:id="count" text="Количество" style="-fx-alignment: CENTER_RIGHT"/>
+               <TableColumn fx:id="discount" text="Скидка" style="-fx-alignment: CENTER_RIGHT"/>
                <TableColumn fx:id="totalPrice" text="Сумма" style="-fx-alignment: CENTER_RIGHT"/>
                <TableColumn fx:id="operation" text="Операции" style="-fx-alignment: CENTER"/>
             </columns>

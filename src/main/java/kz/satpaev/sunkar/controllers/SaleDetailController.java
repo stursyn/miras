@@ -3,29 +3,18 @@ package kz.satpaev.sunkar.controllers;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.StackPane;
-import kz.satpaev.sunkar.callbacks.ItemRemoveButtonCallback;
 import kz.satpaev.sunkar.model.dto.ItemDto;
-import kz.satpaev.sunkar.model.dto.SaleDto;
-import kz.satpaev.sunkar.model.entity.Sale;
 import kz.satpaev.sunkar.model.projection.SaleDetailProjection;
 import kz.satpaev.sunkar.repository.SaleItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.net.URL;
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.function.Supplier;
@@ -50,6 +39,8 @@ public class SaleDetailController implements Initializable {
   @FXML
   public TableColumn<ItemDto, Integer> count;
   @FXML
+  public TableColumn<ItemDto, Integer> discount;
+  @FXML
   public TableColumn<ItemDto, Integer> totalPrice;
   @FXML
   public TableColumn<ItemDto, String> operation;
@@ -62,6 +53,7 @@ public class SaleDetailController implements Initializable {
     itemName.setCellValueFactory(new PropertyValueFactory<>("ItemName"));
     price.setCellValueFactory(new PropertyValueFactory<>("Price"));
     count.setCellValueFactory(new PropertyValueFactory<>("Count"));
+    discount.setCellValueFactory(new PropertyValueFactory<>("Discount"));
     totalPrice.setCellValueFactory(new PropertyValueFactory<>("TotalPrice"));
 
 //    operation.setCellFactory(new ItemRemoveButtonCallback(rootStackPane, () -> {
@@ -70,9 +62,10 @@ public class SaleDetailController implements Initializable {
 //    }, itemRepository));
 
     barcode.prefWidthProperty().bind(saleItemTable.widthProperty().multiply(0.1));
-    itemName.prefWidthProperty().bind(saleItemTable.widthProperty().multiply(0.4));
+    itemName.prefWidthProperty().bind(saleItemTable.widthProperty().multiply(0.35));
     price.prefWidthProperty().bind(saleItemTable.widthProperty().multiply(0.15));
     count.prefWidthProperty().bind(saleItemTable.widthProperty().multiply(0.1));
+    discount.prefWidthProperty().bind(saleItemTable.widthProperty().multiply(0.05));
     totalPrice.prefWidthProperty().bind(saleItemTable.widthProperty().multiply(0.15));
     operation.prefWidthProperty().bind(saleItemTable.widthProperty().multiply(0.1));
 
@@ -87,11 +80,12 @@ public class SaleDetailController implements Initializable {
               ItemDto itemDto = new ItemDto();
               itemDto.setBarcode(saleDetail.getBarcode());
               itemDto.setItemName(saleDetail.getName());
+              itemDto.setDiscount(saleDetail.getDiscountPercent() == null ? 0 : saleDetail.getDiscountPercent());
               if (saleDetail.getPrice() != null) {
                 itemDto.setPrice(saleDetail.getPrice().doubleValue());
                 if(saleDetail.getQuantity() != null) {
-                  itemDto.setTotalPrice(saleDetail.getPrice().multiply(BigDecimal.valueOf(saleDetail.getQuantity())).doubleValue());
                   itemDto.setCount(saleDetail.getQuantity());
+                  itemDto.recomputeTotalPrice();
                 }
               }
               return itemDto;

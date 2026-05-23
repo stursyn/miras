@@ -7,4 +7,5 @@ public interface SaleDetailProjection {
   String getName();
   BigDecimal getPrice();
   Integer getQuantity();
+  Integer getDiscountPercent();
 }

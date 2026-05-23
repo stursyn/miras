@@ -72,6 +72,8 @@ public class SellOperationController implements Initializable {
   @FXML
   public TableColumn<ItemDto, Integer> count;
   @FXML
+  public TableColumn<ItemDto, Integer> discount;
+  @FXML
   public TableColumn<ItemDto, Integer> totalPrice;
   @FXML
   public TableColumn<ItemDto, String> operation;
@@ -106,6 +108,7 @@ public class SellOperationController implements Initializable {
     itemName.setCellValueFactory(new PropertyValueFactory<>("ItemName"));
     price.setCellValueFactory(new PropertyValueFactory<>("Price"));
     count.setCellValueFactory(new PropertyValueFactory<>("Count"));
+    discount.setCellValueFactory(new PropertyValueFactory<>("Discount"));
     totalPrice.setCellValueFactory(new PropertyValueFactory<>("TotalPrice"));
 
     operation.setCellFactory(new ItemRemoveButtonCallback(rootStackPane, () -> {
@@ -114,9 +117,10 @@ public class SellOperationController implements Initializable {
     }, itemRepository));
 
     barcode.prefWidthProperty().bind(itemTable.widthProperty().multiply(0.1));
-    itemName.prefWidthProperty().bind(itemTable.widthProperty().multiply(0.4));
+    itemName.prefWidthProperty().bind(itemTable.widthProperty().multiply(0.35));
     price.prefWidthProperty().bind(itemTable.widthProperty().multiply(0.1));
     count.prefWidthProperty().bind(itemTable.widthProperty().multiply(0.1));
+    discount.prefWidthProperty().bind(itemTable.widthProperty().multiply(0.05));
     totalPrice.prefWidthProperty().bind(itemTable.widthProperty().multiply(0.1));
     operation.prefWidthProperty().bind(itemTable.widthProperty().multiply(0.2));
     combinedButton.setOnAction(event -> {
@@ -255,7 +259,8 @@ public class SellOperationController implements Initializable {
             displayItem.setPrice(subItem.getSellPrice().doubleValue());
           }
           displayItem.setCount(1);
-          displayItem.setTotalPrice(displayItem.getCount() * displayItem.getPrice());
+          displayItem.setDiscount(0);
+          displayItem.recomputeTotalPrice();
           itemTable.getItems().add(0, displayItem);
         }
       }
@@ -270,7 +275,7 @@ public class SellOperationController implements Initializable {
       for (ItemDto item : itemTable.getItems()) {
         if (barCode.equals(item.getBarcode())) {
           item.setCount(item.getCount() + 1);
-          item.setTotalPrice(item.getCount() * item.getPrice());
+          item.recomputeTotalPrice();
           foundItem = item;
 
           itemTable.refresh();
@@ -304,7 +309,8 @@ public class SellOperationController implements Initializable {
         displayItem.setPrice(dbItem.getSellPrice().doubleValue());
       }
       displayItem.setCount(1);
-      displayItem.setTotalPrice(displayItem.getCount() * displayItem.getPrice());
+      displayItem.setDiscount(0);
+      displayItem.recomputeTotalPrice();
       itemTable.getItems().add(0, displayItem);
     }
 
@@ -418,7 +424,8 @@ public class SellOperationController implements Initializable {
             newItem.setItemName(UNIVERSAL_PRODUCT_TITLE);
             newItem.setPrice(price.doubleValue());
             newItem.setCount(1);
-            newItem.setTotalPrice(price.doubleValue() * newItem.getCount());
+            newItem.setDiscount(0);
+            newItem.recomputeTotalPrice();
             Platform.runLater(()->{
               itemTable.getItems().add(0, newItem);
               itemTable.refresh();
@@ -554,6 +561,7 @@ public class SellOperationController implements Initializable {
       saleItem.setSaleId(sale.getId());
       saleItem.setQuantity(item.getCount());
       saleItem.setUnitPrice(BigDecimal.valueOf(item.getPrice()));
+      saleItem.setDiscountPercent(item.getDiscount());
       saveList.add(saleItem);
     }
     sellItemRepository.saveAll(saveList);
@@ -634,6 +642,7 @@ public class SellOperationController implements Initializable {
       saleItem.setHoldSaleId(sale.getId());
       saleItem.setQuantity(item.getCount());
       saleItem.setUnitPrice(BigDecimal.valueOf(item.getPrice()));
+      saleItem.setDiscountPercent(item.getDiscount());
       saveList.add(saleItem);
     }
     holdSaleItemRepository.saveAll(saveList);

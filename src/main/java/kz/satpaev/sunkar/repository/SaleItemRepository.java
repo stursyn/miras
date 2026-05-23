@@ -11,7 +11,8 @@ import java.util.List;
 public interface SaleItemRepository extends JpaRepository<SaleItem, SaleItemId> {
   @Query("select s.itemBarcode as barcode, " +
       " case when i.name is null then pi.name else i.name end as name, " +
-      " s.quantity as quantity, s.unitPrice as price " +
+      " s.quantity as quantity, s.unitPrice as price, " +
+      " s.discountPercent as discountPercent " +
       " from SaleItem s " +
       " left join Item i on i.barcode = s.itemBarcode " +
       " left join SubItem si on si.code = s.itemBarcode " +

@@ -5,18 +5,19 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 public class ItemDto {
-  private SimpleStringProperty barcode = new SimpleStringProperty();
-  private SimpleStringProperty itemName = new SimpleStringProperty();
-  private SimpleDoubleProperty price = new SimpleDoubleProperty(0);
-  private SimpleIntegerProperty count = new SimpleIntegerProperty(0);
-  private SimpleDoubleProperty totalPrice = new SimpleDoubleProperty(0);
+  private final SimpleStringProperty barcode = new SimpleStringProperty();
+  private final SimpleStringProperty itemName = new SimpleStringProperty();
+  private final SimpleDoubleProperty price = new SimpleDoubleProperty(0);
+  private final SimpleIntegerProperty count = new SimpleIntegerProperty(0);
+  private final SimpleIntegerProperty discount = new SimpleIntegerProperty(0);
+  private final SimpleDoubleProperty totalPrice = new SimpleDoubleProperty(0);
 
   public String getBarcode() {
     return barcode.get();
   }
 
   public void setBarcode(String barcode) {
-    this.barcode = new SimpleStringProperty(barcode);
+    this.barcode.set(barcode);
   }
 
   public String getItemName() {
@@ -24,7 +25,7 @@ public class ItemDto {
   }
 
   public void setItemName(String itemName) {
-    this.itemName = new SimpleStringProperty(itemName);
+    this.itemName.set(itemName);
   }
 
   public double getPrice() {
@@ -32,15 +33,23 @@ public class ItemDto {
   }
 
   public void setPrice(double price) {
-    this.price = new SimpleDoubleProperty(price);
-  }
-
-  public void setCount(int count) {
-    this.count = new SimpleIntegerProperty(count);
+    this.price.set(price);
   }
 
   public int getCount() {
     return count.get();
+  }
+
+  public void setCount(int count) {
+    this.count.set(count);
+  }
+
+  public int getDiscount() {
+    return discount.get();
+  }
+
+  public void setDiscount(int discount) {
+    this.discount.set(discount);
   }
 
   public double getTotalPrice() {
@@ -48,6 +57,10 @@ public class ItemDto {
   }
 
   public void setTotalPrice(double totalPrice) {
-    this.totalPrice = new SimpleDoubleProperty(totalPrice);
+    this.totalPrice.set(totalPrice);
+  }
+
+  public void recomputeTotalPrice() {
+    setTotalPrice(Math.ceil(getCount() * getPrice() * (100 - getDiscount()) / 100.0));
   }
 }

@@ -2,15 +2,14 @@ package kz.satpaev.sunkar.callbacks;
 
 import javafx.application.Platform;
 import javafx.scene.control.Button;
+import javafx.scene.control.MenuButton;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Border;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Paint;
 import javafx.util.Callback;
 import kz.satpaev.sunkar.controllers.AbstractController;
 import kz.satpaev.sunkar.model.dto.ItemDto;
@@ -20,6 +19,8 @@ import kz.satpaev.sunkar.repository.ItemRepository;
 import java.util.function.Supplier;
 
 public class ItemRemoveButtonCallback implements Callback<TableColumn<ItemDto, String>, TableCell<ItemDto, String>> {
+  private static final int[] DISCOUNT_OPTIONS = {3, 5, 10};
+
   public StackPane rootStackPane;
   public Supplier<?> supplier;
   public ItemRepository itemRepository;
@@ -39,7 +40,7 @@ public class ItemRemoveButtonCallback implements Callback<TableColumn<ItemDto, S
           setGraphic(null);
         } else {
           final HBox pane = new HBox();
-          pane.getChildren().addAll(getEditBtn(), getDecreaseBtn(), getCountButton());
+          pane.getChildren().addAll(getEditBtn(), getDecreaseBtn(), getCountButton(), getDiscountMenu());
           pane.setSpacing(5);
 
           setGraphic(pane);
@@ -62,7 +63,7 @@ public class ItemRemoveButtonCallback implements Callback<TableColumn<ItemDto, S
             Item updatedItem = itemRepository.findItemByBarcode(itemDto.getBarcode());
 
             itemDto.setPrice(updatedItem.getSellPrice().doubleValue());
-            itemDto.setTotalPrice(itemDto.getCount() * itemDto.getPrice());
+            itemDto.recomputeTotalPrice();
             itemDto.setItemName(updatedItem.getName());
 
             getTableView().refresh();
@@ -90,7 +91,7 @@ public class ItemRemoveButtonCallback implements Callback<TableColumn<ItemDto, S
           if (object.getCount() == 0) {
             getTableView().getItems().remove(getIndex());
           }
-          object.setTotalPrice(object.getCount() * object.getPrice());
+          object.recomputeTotalPrice();
 
           getTableView().refresh();
 
@@ -123,7 +124,7 @@ public class ItemRemoveButtonCallback implements Callback<TableColumn<ItemDto, S
               if (itemDto.getCount() == 0) {
                 getTableView().getItems().remove(getIndex());
               }
-              itemDto.setTotalPrice(itemDto.getCount() * itemDto.getPrice());
+              itemDto.recomputeTotalPrice();
 
               getTableView().refresh();
 
@@ -136,6 +137,40 @@ public class ItemRemoveButtonCallback implements Callback<TableColumn<ItemDto, S
         countBtn.setPrefSize(40,40);
         countBtn.setGraphic(countView);
         return countBtn;
+      }
+
+      private MenuButton getDiscountMenu() {
+        final Image discountIcon = new Image("icons/discount.png");
+        final ImageView discountView = new ImageView(discountIcon);
+        discountView.setFitHeight(40);
+        discountView.setPreserveRatio(true);
+
+        final MenuButton discountBtn = new MenuButton();
+        discountBtn.getStyleClass().add("option-key");
+        discountBtn.setPrefSize(60, 40);
+        discountBtn.setGraphic(discountView);
+
+        MenuItem clearItem = new MenuItem("Без скидки");
+        clearItem.setOnAction(e -> applyDiscount(0));
+        discountBtn.getItems().add(clearItem);
+
+        for (int percent : DISCOUNT_OPTIONS) {
+          final int value = percent;
+          MenuItem mi = new MenuItem(percent + "%");
+          mi.setOnAction(e -> applyDiscount(value));
+          discountBtn.getItems().add(mi);
+        }
+
+        return discountBtn;
+      }
+
+      private void applyDiscount(int percent) {
+        ItemDto itemDto = getTableView().getItems().get(getIndex());
+        int next = (percent != 0 && itemDto.getDiscount() == percent) ? 0 : percent;
+        itemDto.setDiscount(next);
+        itemDto.recomputeTotalPrice();
+        getTableView().refresh();
+        supplier.get();
       }
     };
   }

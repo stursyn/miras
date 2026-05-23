@@ -16,4 +16,5 @@ public class SaleItem {
     private String itemBarcode;
     private Integer quantity;
     private BigDecimal unitPrice;
+    private Integer discountPercent;
 }

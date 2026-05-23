@@ -75,7 +75,8 @@ public class HoldSalesController implements Initializable {
         itemDto.setItemName(holdSaleItem.getItemName());
         itemDto.setCount(holdSaleItem.getQuantity());
         itemDto.setPrice(holdSaleItem.getUnitPrice().doubleValue());
-        itemDto.setTotalPrice(holdSaleItem.getUnitPrice().doubleValue() * holdSaleItem.getQuantity());
+        itemDto.setDiscount(holdSaleItem.getDiscountPercent() == null ? 0 : holdSaleItem.getDiscountPercent());
+        itemDto.recomputeTotalPrice();
         itemDto.setBarcode(holdSaleItem.getItemBarcode());
         ret.add(itemDto);
       });
