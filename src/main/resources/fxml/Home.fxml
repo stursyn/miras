@@ -18,7 +18,7 @@
          <Button text="Ожидающие покупки" styleClass="cus-menu-button" onAction="#holdSales"/>
          <MenuBar styleClass="menu-bar">
             <Menu text="Продукт" styleClass="menu-button">
-               <MenuItem text="Добавить" onAction="#addNewProduct"/>
+               <MenuItem text="Добавить/Изменить цену" onAction="#addNewProduct"/>
                <MenuItem text="Добавить весовой" onAction="#addSubItem"/>
             </Menu>
             <Menu text="История продаж" styleClass="menu-button">

@@ -116,7 +116,7 @@ public class SellOperationController implements Initializable {
     operation.setCellFactory(new ItemRemoveButtonCallback(rootStackPane, () -> {
       countTotalSum();
       return null;
-    }, itemRepository));
+    }));
 
     barcode.prefWidthProperty().bind(itemTable.widthProperty().multiply(0.1));
     itemName.prefWidthProperty().bind(itemTable.widthProperty().multiply(0.35));
@@ -582,9 +582,9 @@ public class SellOperationController implements Initializable {
       if (!StringUtils.isEmpty(name)) {
         controller.name.setText(name);
       }
-      controller.quantity.setText("1");
+      controller.populateCurrentLabels(null);
 
-      Platform.runLater(() -> controller.sellPrice.requestFocus());
+      Platform.runLater(() -> controller.comingSupplierPrice.requestFocus());
 
       controller.save.setOnAction(event -> {
         String barcodeText = controller.barcode.getText();

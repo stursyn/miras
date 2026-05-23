@@ -29,13 +29,13 @@ public class AbstractController {
       loader.setControllerFactory(applicationContext::getBean);
       Parent root = loader.load();
       ItemController controller = loader.getController();
-      controller.barcode.setText(item.getBarcode());
-      controller.name.setText(item.getName());
-      controller.quantity.setText(item.getCurrentQuantity() + "");
-      controller.sellPrice.setText(item.getSellPrice() + "");
-      controller.sellPrice.requestFocus();
+      if (item != null) {
+        controller.barcode.setText(item.getBarcode());
+        controller.name.setText(item.getName());
+      }
+      controller.populateCurrentLabels(item);
 
-      Platform.runLater(() -> controller.sellPrice.requestFocus());
+      Platform.runLater(() -> controller.comingSupplierPrice.requestFocus());
 
       controller.save.setOnAction(event -> {
         Item ret = controller.itemSave();

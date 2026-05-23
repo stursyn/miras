@@ -13,8 +13,6 @@ import javafx.scene.layout.StackPane;
 import javafx.util.Callback;
 import kz.satpaev.sunkar.controllers.AbstractController;
 import kz.satpaev.sunkar.model.dto.ItemDto;
-import kz.satpaev.sunkar.model.entity.Item;
-import kz.satpaev.sunkar.repository.ItemRepository;
 
 import java.util.function.Supplier;
 
@@ -23,12 +21,10 @@ public class ItemRemoveButtonCallback implements Callback<TableColumn<ItemDto, S
 
   public StackPane rootStackPane;
   public Supplier<?> supplier;
-  public ItemRepository itemRepository;
-  public ItemRemoveButtonCallback(StackPane rootStackPane, Supplier<?> supplier, ItemRepository itemRepository) {
+  public ItemRemoveButtonCallback(StackPane rootStackPane, Supplier<?> supplier) {
     super();
     this.rootStackPane = rootStackPane;
     this.supplier = supplier;
-    this.itemRepository = itemRepository;
   }
   @Override
   public TableCell call(final TableColumn<ItemDto, String> param) {
@@ -40,41 +36,12 @@ public class ItemRemoveButtonCallback implements Callback<TableColumn<ItemDto, S
           setGraphic(null);
         } else {
           final HBox pane = new HBox();
-          pane.getChildren().addAll(getEditBtn(), getDecreaseBtn(), getCountButton(), getDiscountMenu());
+          pane.getChildren().addAll(getDecreaseBtn(), getCountButton(), getDiscountMenu());
           pane.setSpacing(5);
 
           setGraphic(pane);
         }
           setText(null);
-      }
-
-      private Button getEditBtn() {
-        final Image edit = new Image("icons/edit.png");
-        final ImageView editView = new ImageView(edit);
-        final Button editBtn = new Button();
-        editBtn.getStyleClass().add("option-key");
-
-        editView.setFitHeight(40);
-        editView.setPreserveRatio(true);
-        editBtn.setOnAction(event -> {
-          ItemDto itemDto = getTableView().getItems().get(getIndex());
-          Item itemByBarcode = itemRepository.findItemByBarcode(itemDto.getBarcode());
-          new AbstractController().dbAddNewItem(itemByBarcode, rootStackPane, saveItem -> {
-            Item updatedItem = itemRepository.findItemByBarcode(itemDto.getBarcode());
-
-            itemDto.setPrice(updatedItem.getSellPrice().doubleValue());
-            itemDto.recomputeTotalPrice();
-            itemDto.setItemName(updatedItem.getName());
-
-            getTableView().refresh();
-
-            supplier.get();
-          });
-
-        });
-        editBtn.setPrefSize(40,40);
-        editBtn.setGraphic(editView);
-        return editBtn;
       }
 
       private Button getDecreaseBtn() {

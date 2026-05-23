@@ -17,6 +17,7 @@ public class Item {
   private String name;
   private String description;
   private BigDecimal sellPrice;
+  private BigDecimal currentSupplierPrice;
   private Integer currentQuantity;
   private BigDecimal weight;
   @Column(nullable = false)

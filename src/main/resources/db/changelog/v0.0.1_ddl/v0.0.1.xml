@@ -129,4 +129,30 @@
             <column name="item_name" type="varchar(255)"/>
         </createTable>
     </changeSet>
+
+    <changeSet author="seiit" id="v0.0.2-buy-item-history">
+        <addColumn tableName="item">
+            <column name="current_supplier_price" type="numeric"/>
+        </addColumn>
+        <addColumn tableName="buy_item">
+            <column name="item_barcode" type="varchar(255)"/>
+        </addColumn>
+        <addForeignKeyConstraint baseTableName="buy_item"
+                                 baseColumnNames="item_barcode"
+                                 referencedTableName="item"
+                                 referencedColumnNames="barcode"
+                                 constraintName="fk_buy_item_item"/>
+    </changeSet>
+
+    <changeSet author="seiit" id="v0.0.3-buy-item-created-at">
+        <addColumn tableName="buy_item">
+            <column name="created_at" type="timestamp"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="seiit" id="v0.0.4-buy-item-leaving-quantity">
+        <addColumn tableName="buy_item">
+            <column name="leaving_quantity" type="int"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>
