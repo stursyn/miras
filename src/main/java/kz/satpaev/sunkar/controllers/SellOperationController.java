@@ -558,6 +558,7 @@ public class SellOperationController implements Initializable {
     sale = saleRepository.save(sale);
 
     var saveList = new ArrayList<SaleItem>();
+    var itemsToUpdate = new ArrayList<Item>();
     for (ItemDto item : itemTable.getItems()) {
       var saleItem = new SaleItem();
       saleItem.setItemBarcode(item.getBarcode());
@@ -566,8 +567,16 @@ public class SellOperationController implements Initializable {
       saleItem.setUnitPrice(BigDecimal.valueOf(item.getPrice()));
       saleItem.setDiscountPercent(item.getDiscount());
       saveList.add(saleItem);
+
+      Item dbItem = itemRepository.findItemByBarcode(item.getBarcode());
+      if (dbItem != null) {
+        int currentQty = dbItem.getCurrentQuantity() != null ? dbItem.getCurrentQuantity() : 0;
+        dbItem.setCurrentQuantity(currentQty - item.getCount());
+        itemsToUpdate.add(dbItem);
+      }
     }
     sellItemRepository.saveAll(saveList);
+    itemRepository.saveAll(itemsToUpdate);
 
     itemTable.getItems().clear();
   }
