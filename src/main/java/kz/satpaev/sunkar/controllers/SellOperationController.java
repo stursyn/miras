@@ -118,9 +118,9 @@ public class SellOperationController implements Initializable {
       return null;
     }));
 
-    barcode.prefWidthProperty().bind(itemTable.widthProperty().multiply(0.18));
+    barcode.prefWidthProperty().bind(itemTable.widthProperty().multiply(0.16));
     itemName.prefWidthProperty().bind(itemTable.widthProperty().multiply(0.4));
-    price.prefWidthProperty().bind(itemTable.widthProperty().multiply(0.05));
+    price.prefWidthProperty().bind(itemTable.widthProperty().multiply(0.07));
     count.prefWidthProperty().bind(itemTable.widthProperty().multiply(0.05));
     discount.prefWidthProperty().bind(itemTable.widthProperty().multiply(0.05));
     totalPrice.prefWidthProperty().bind(itemTable.widthProperty().multiply(0.07));

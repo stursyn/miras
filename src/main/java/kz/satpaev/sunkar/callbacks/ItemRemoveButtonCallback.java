@@ -50,7 +50,7 @@ public class ItemRemoveButtonCallback implements Callback<TableColumn<ItemDto, S
         final Button decreaseBtn = new Button();
         decreaseBtn.getStyleClass().add("option-key");
 
-        decreaseView.setFitHeight(40);
+        decreaseView.setFitHeight(30);
         decreaseView.setPreserveRatio(true);
         decreaseBtn.setOnAction(event -> {
           var object = getTableView().getItems().get(getIndex());
@@ -65,7 +65,7 @@ public class ItemRemoveButtonCallback implements Callback<TableColumn<ItemDto, S
           supplier.get();
         });
 
-        decreaseBtn.setPrefSize(40,40);
+        decreaseBtn.setPrefSize(30,30);
         decreaseBtn.setGraphic(decreaseView);
         return decreaseBtn;
       }
@@ -76,7 +76,7 @@ public class ItemRemoveButtonCallback implements Callback<TableColumn<ItemDto, S
         final Button countBtn = new Button();
         countBtn.getStyleClass().add("option-key");
 
-        countView.setFitHeight(40);
+        countView.setFitHeight(30);
         countView.setPreserveRatio(true);
         countBtn.setOnAction(event -> {
           ItemDto itemDto = getTableView().getItems().get(getIndex());
@@ -101,7 +101,7 @@ public class ItemRemoveButtonCallback implements Callback<TableColumn<ItemDto, S
           supplier.get();
         }
         );
-        countBtn.setPrefSize(40,40);
+        countBtn.setPrefSize(30,30);
         countBtn.setGraphic(countView);
         return countBtn;
       }
@@ -109,12 +109,12 @@ public class ItemRemoveButtonCallback implements Callback<TableColumn<ItemDto, S
       private MenuButton getDiscountMenu() {
         final Image discountIcon = new Image("icons/discount.png");
         final ImageView discountView = new ImageView(discountIcon);
-        discountView.setFitHeight(25);
+        discountView.setFitHeight(20);
         discountView.setPreserveRatio(true);
 
         final MenuButton discountBtn = new MenuButton();
         discountBtn.getStyleClass().add("option-key");
-        discountBtn.setMaxSize(40, 40);
+        discountBtn.setMaxSize(20, 20);
         discountBtn.setGraphic(discountView);
 
         MenuItem clearItem = new MenuItem("Без скидки");
