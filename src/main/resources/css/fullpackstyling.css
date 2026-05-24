@@ -28,14 +28,13 @@
 
 .table-view .column-header .label {
     -fx-text-fill: white;
-    -fx-font-weight: bold;
-    -fx-font-size: 24;
+    -fx-font-size: 16;
     -fx-alignment: CENTER_LEFT;
 }
 
 .table-row-cell {
     -fx-background-color: white;
-    -fx-font-size: 20;
+    -fx-font-size: 14;
     -fx-border-color: #c8ddff; /* граница строк */
     -fx-border-width: 0 0 1 0; /* нижняя линия */
 }

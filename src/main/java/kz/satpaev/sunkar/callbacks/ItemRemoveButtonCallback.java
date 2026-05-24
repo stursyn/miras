@@ -109,12 +109,12 @@ public class ItemRemoveButtonCallback implements Callback<TableColumn<ItemDto, S
       private MenuButton getDiscountMenu() {
         final Image discountIcon = new Image("icons/discount.png");
         final ImageView discountView = new ImageView(discountIcon);
-        discountView.setFitHeight(40);
+        discountView.setFitHeight(25);
         discountView.setPreserveRatio(true);
 
         final MenuButton discountBtn = new MenuButton();
         discountBtn.getStyleClass().add("option-key");
-        discountBtn.setPrefSize(60, 40);
+        discountBtn.setMaxSize(40, 40);
         discountBtn.setGraphic(discountView);
 
         MenuItem clearItem = new MenuItem("Без скидки");

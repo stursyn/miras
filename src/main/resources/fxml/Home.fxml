@@ -28,15 +28,6 @@
          </MenuBar>
       </HBox>
       <VBox maxWidth="Infinity" maxHeight="Infinity" VBox.vgrow="ALWAYS">
-         <HBox style="-fx-background-color: #2D75E8;">
-            <FontAwesomeIconView fill="WHITE" glyphName="GG" size="60"/>
-            <Label text="Sunkar" textFill="WHITE">
-               <font>
-                  <Font size="48.0"/>
-               </font>
-            </Label>
-         </HBox>
-
          <TableView fx:id="itemTable" VBox.vgrow="ALWAYS">
             <columns>
                <TableColumn fx:id="barcode" text="Код" style="-fx-alignment: CENTER_LEFT"/>
