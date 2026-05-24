@@ -54,16 +54,16 @@
          <padding>
             <Insets right="10" bottom="10" left="10" top="10"/>
          </padding>
-         <VBox prefWidth="520"  prefHeight="220" spacing="30" styleClass="info-card" >
+         <VBox prefWidth="520"  prefHeight="220" spacing="3" styleClass="info-card" >
             <padding>
-               <Insets right="40" top="40" left="40" bottom="40"/>
+               <Insets right="40" top="10" left="40" bottom="10"/>
             </padding>
             <HBox maxWidth="Infinity" maxHeight="Infinity" styleClass="total-label">
                <Label text="ИТОГО"/>
                <Label HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
                <Label fx:id="totalSum"/>
             </HBox>
-            <VBox maxWidth="Infinity" maxHeight="Infinity" spacing="5" styleClass="other-label">
+            <VBox maxWidth="Infinity" maxHeight="Infinity" spacing="2" styleClass="other-label">
                <HBox maxWidth="Infinity" maxHeight="Infinity">
                   <Label text="Скидка"/>
                   <Label HBox.hgrow="ALWAYS" maxWidth="Infinity"/>

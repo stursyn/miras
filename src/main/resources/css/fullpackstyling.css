@@ -111,12 +111,12 @@
 }
 
 .total-label {
-    -fx-font-size: 28px;
+    -fx-font-size: 20px;
     -fx-font-weight: bold;
 }
 
 .other-label {
-    -fx-font-size: 16px;
+    -fx-font-size: 14px;
     -fx-text-fill: #777;
 }
 
